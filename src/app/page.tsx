@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { Test } from "./Test";
+import { Test } from "./example/Test";
 
 export default function Home() {
   return (
-    <div >
+    <div className="p-2">
      <Test /> 
     </div>
   );

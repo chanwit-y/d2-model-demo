@@ -5,14 +5,14 @@
   "identifier": "com.tauri.dev",
   "build": {
     "frontendDist": "../out",
-    "devUrl": "http://localhost:3000",
+    "devUrl": "http://localhost:3000/model",
     "beforeDevCommand": "bun dev",
     "beforeBuildCommand": "bun build"
   },
   "app": {
     "windows": [
       {
-        "title": "d2-model-demo",
+        "title": "d2",
         "width": 800,
         "height": 600,
         "resizable": true,
