@@ -2,37 +2,23 @@
 
 import React, { Fragment, useCallback, useState } from 'react'
 import { ModelList } from './ModelList'
+import { ModelCatagory } from './ModelCatagory'
 
 export const ModelGroup = () => {
 	const [isActive, setIsActive] = useState(1)
 
-	const handleActive = (index: number) => {
-		setIsActive(index)
-	} 
 
 	return (
-		<div className='max-w-xs'>
-			<div className="collapse collapse-arrow bg-base-200 mb-2" onClick={() => handleActive(1)}>
-				<input type="radio" name="my-accordion-2" checked={isActive === 1} />
-				<div className="collapse-title text-md font-semibold">Common</div>
-				<div className="collapse-content">
-					<ModelList />
-				</div>
-			</div>
-			<div className="collapse collapse-arrow bg-base-200 mb-2" onClick={() => handleActive(2)}>
-				<input type="radio" name="my-accordion-2" checked={isActive === 2} />
-				<div className="collapse-title text-md font-semibold">System 1</div>
-				<div className="collapse-content">
-					<ModelList />
-				</div>
-			</div>
-			<div className="collapse collapse-arrow bg-base-200 mb-2" onClick={() => handleActive(3)}>
-				<input type="radio" name="my-accordion-2" checked={isActive === 3} />
-				<div className="collapse-title text-md font-semibold">System 2</div>
-				<div className="collapse-content">
-					<ModelList />
-				</div>
-			</div>
+		<div className='max-w-xs h-[calc(100vh-6rem)] p-2 rounded-md overflow-scroll dark:bg-slate-800'>
+			<ModelCatagory title='Common' index={1} indexActive={isActive} onActive={setIsActive}>
+				<ModelList />
+			</ModelCatagory>
+			<ModelCatagory title='System 1' index={2} indexActive={isActive} onActive={setIsActive}>
+				<ModelList />
+			</ModelCatagory>
+			<ModelCatagory title='System 1' index={3} indexActive={isActive} onActive={setIsActive}>
+				<ModelList />
+			</ModelCatagory>
 		</div>
 	)
 }

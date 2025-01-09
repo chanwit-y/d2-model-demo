@@ -6,7 +6,7 @@ export default function Model() {
 		<div className="col-span-1 p-4">
 			<ModelGroup />
 		</div>
-		<div className=" col-span-3">
+		<div className=" col-span-3 py-4 pl-0 pr-4">
 			<ModelDetail />
 		</div>
 	</div>)
