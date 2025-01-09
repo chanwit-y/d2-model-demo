@@ -8,7 +8,7 @@ export const ModelDetail = () => {
 				<p className=' text-lg font-bold'>
 					Model Detail
 				</p>
-				<button className="btn btn-square btn-sm">
+				{/* <button className="btn btn-square btn-sm">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						className="h-4 w-4"
@@ -21,9 +21,9 @@ export const ModelDetail = () => {
 							strokeWidth="2"
 							d="M6 18L18 6M6 6l12 12" />
 					</svg>
-				</button>
+				</button> */}
 			</div>
-			<ModelTable />
+			{/* <ModelTable /> */}
 		</div>
 	)
 }
