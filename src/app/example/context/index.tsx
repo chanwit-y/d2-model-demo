@@ -10,24 +10,26 @@ type contextType<T> = {
 
 
 export function createCtx<T>() {
-	return createContext({} as contextType<T>)
+	return createContext<contextType<T>>({} as contextType<T>)
 }
+
 
 type Props = {
 	children: ReactNode
 }
 
-export function getProvider<T>(ctx: Context<{}>) {
+export function getProvider<T>(Ctx: Context<contextType<T>>) {
 	return function Provider({ children }: Props) {
+		const [data] = useState<T>({} as any)
 		const [val, setVal] = useState(0)
 		const sum = useCallback((a: number, b: number) => setVal(a + b), [])
 
-		return <ctx.Provider value={{ val, sum, data: {} as T }}>
+		return <Ctx value={{ val, sum,  data }}>
 			<p>
 				Provider Value: {val}
 			</p>
 			{children}
-		</ctx.Provider>
+		</Ctx>
 	}
 }
 
