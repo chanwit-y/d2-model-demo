@@ -5,7 +5,7 @@
   "identifier": "com.tauri.dev",
   "build": {
     "frontendDist": "../out",
-    "devUrl": "http://localhost:3000/",
+    "devUrl": "http://localhost:3000/model",
     "beforeDevCommand": "bun dev",
     "beforeBuildCommand": "bun build"
   },

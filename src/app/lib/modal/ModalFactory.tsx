@@ -1,5 +1,7 @@
+"use client"
+
 import { TObject, Type, type Static } from '@sinclair/typebox'
-import { createContext, ReactNode, Context, use, useState } from 'react'
+import { createContext, ReactNode, Context, use, useState, useEffect, useMemo } from 'react'
 
 // const config = {
 // 	useModal1: {
@@ -55,21 +57,62 @@ function createModal<C extends Config>(c: C): {
 		return acc
 	}, {})
 
+	console.log(registers)
+
 	const Ctx = createContext({} as TContext<C>)
 
 	// create hook for each modal
 
 	const Provider = ({ children }: { children: ReactNode }) => {
 		const [reg, setReg] = useState<Record<string, ReactNode>>(registers)
+		const [isShow, setIsShow] = useState(false)
+		const [current, setCurrent] = useState<string>("")
 
-		return <Ctx value={{} as any}>
+		const hook = Object.keys(c).reduce((_acc, key) => {
+
+			(_acc as any)[key] = () => {
+				return {
+					show: (p: { [key: string]: any }) => {
+						console.log(`Showing modal ${key} with params`, p)
+
+						// setContent(inits.find(i => i.k === k)?.c || null)
+						setIsShow(true)
+						setCurrent(key)
+					},
+					setTitle: (title: string) => {
+						console.log(`Setting title of modal ${key} to ${title}`)
+					}
+				}
+			}
+
+			return _acc
+		}, {} as TContext<C>)
+
+		const content = useMemo(() => registers[current], [registers, current])
+
+
+		useEffect(() => {
+			const modal: HTMLDialogElement = document.getElementById("modal") as HTMLDialogElement
+			if (modal) {
+				if (isShow)
+					modal.showModal()
+				else modal.close()
+			} else console.error(`Modal with id not found`)
+		}, [isShow])
+
+		console.log("hook", hook)
+
+		return <Ctx value={{ ...hook }}>
 			<dialog id="modal" className="modal">
 				<div className="modal-box">
 					<h3 className="text-lg font-bold">Hello!</h3>
 					{/* {content} */}
 					{/* <div className="modal-action">
 						<button className="btn" onClick={() => setIsShow(false)}>Close</button>
+
 					</div> */}
+					{content}
+					<button className="btn" onClick={() => setIsShow(false)}>Close</button>
 				</div>
 			</dialog>
 			{children}
@@ -81,8 +124,12 @@ function createModal<C extends Config>(c: C): {
 	return { Provider, Ctx }
 }
 
-const { Provider, Ctx } = createModal({
-	useModal1: {
+
+
+
+
+export const { Provider, Ctx } = createModal({
+	modal1: {
 		title: "Modal 1",
 		param: Type.Object({
 			name: Type.String(),
@@ -90,7 +137,7 @@ const { Provider, Ctx } = createModal({
 		}),
 		content: <div>Modal 1</div>,
 	},
-	useModal2: {
+	modal2: {
 		title: "Modal 2",
 		param: Type.Object({
 			age: Type.Number()
@@ -99,25 +146,26 @@ const { Provider, Ctx } = createModal({
 	},
 })
 
-const {  useModal1, useModal2 }  = use(Ctx)
+// export const {  useModal1, useModal2 }  = use(Ctx)
+// export const hook = () => use(Ctx)
 
-const X = () => {
-	return (<Provider>
-		<>
+// const X = () => {
+// 	return (<Provider>
+// 		<>
 
-		</>
-	</Provider>)
-}
+// 		</>
+// 	</Provider>)
+// }
 
 
-const A = () => {
-	const { show } = useModal1()	
-	return (
-		<div>
-			<button onClick={() => show({ name: "John", age: 20 })}>Show</button>
-		</div>
-	)
-}
+// const A = () => {
+// 	const { show } = useModal1()	
+// 	return (
+// 		<div>
+// 			<button onClick={() => show({ name: "John", age: 20 })}>Show</button>
+// 		</div>
+// 	)
+// }
 
 // const { Provider, hook } = createModal({
 // 	useModal1: {
