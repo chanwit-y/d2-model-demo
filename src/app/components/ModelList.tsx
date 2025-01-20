@@ -5,7 +5,7 @@ import { Ctx } from '../lib/modal/ModalFactory';
 // import { useModal1 } from '../lib/modal/ModalFactory';
 
 export const ModelList = () => {
-	const { modal1, modal2 } = use(Ctx)
+	const { m: { modal1, modal2 } } = use(Ctx)
 
 	// useEffect(() => {
 	// 	// const { show } = initModal(<p className="py-4">Press ESC key or click the button below to close</p>)

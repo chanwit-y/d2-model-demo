@@ -2,6 +2,7 @@
 
 import { TObject, Type, type Static } from '@sinclair/typebox'
 import { createContext, ReactNode, Context, use, useState, useEffect, useMemo } from 'react'
+import { Modal1 } from './Modal1'
 
 // const config = {
 // 	useModal1: {
@@ -45,7 +46,10 @@ type HookResult<P> = {
 	setTitle: (title: string) => void
 }
 type Hook<P> = () => HookResult<P>
-type TContext<C extends Config> = { [K in keyof C]: Hook<Static<C[K]["param"]>> }
+type TContext<C extends Config> = {
+	m: { [K in keyof C]: Hook<Static<C[K]["param"]>> }
+	param?: { [K in keyof C]: Static<C[K]["param"]> } 
+} 
 
 function createModal<C extends Config>(c: C): {
 	Provider: ({ children }: { children: ReactNode }) => ReactNode,
@@ -66,16 +70,18 @@ function createModal<C extends Config>(c: C): {
 	const Provider = ({ children }: { children: ReactNode }) => {
 		const [reg, setReg] = useState<Record<string, ReactNode>>(registers)
 		const [isShow, setIsShow] = useState(false)
-		const [current, setCurrent] = useState<string>("")
+		const [current, setCurrent] = useState<string>()
+		const [param, setParam] = useState<{ [K in keyof C]: Static<C[K]["param"]> }>()
 
-		const hook = Object.keys(c).reduce((_acc, key) => {
+		const m = Object.keys(c).reduce((_acc, key) => {
 
-			(_acc as any)[key] = () => {
+			(_acc as Record<string, any>)[key] = () => {
 				return {
-					show: (p: { [key: string]: any }) => {
+					show: (p: Record<string, any>) => {
 						console.log(`Showing modal ${key} with params`, p)
 
 						// setContent(inits.find(i => i.k === k)?.c || null)
+						setParam(prev => ({ ...prev, [key]: p } as { [K in keyof C]: Static<C[K]["param"]> }))
 						setIsShow(true)
 						setCurrent(key)
 					},
@@ -86,9 +92,9 @@ function createModal<C extends Config>(c: C): {
 			}
 
 			return _acc
-		}, {} as TContext<C>)
+		}, {} as { [K in keyof C]: Hook<Static<C[K]["param"]>>})
 
-		const content = useMemo(() => registers[current], [registers, current])
+		const content = useMemo(() => current ? registers[current] : null, [registers, current])
 
 
 		useEffect(() => {
@@ -100,9 +106,9 @@ function createModal<C extends Config>(c: C): {
 			} else console.error(`Modal with id not found`)
 		}, [isShow])
 
-		console.log("hook", hook)
+		// console.log("hook", hook)
 
-		return <Ctx value={{ ...hook }}>
+		return <Ctx value={{ m, param }}>
 			<dialog id="modal" className="modal">
 				<div className="modal-box">
 					<h3 className="text-lg font-bold">Hello!</h3>
@@ -128,6 +134,7 @@ function createModal<C extends Config>(c: C): {
 
 
 
+
 export const { Provider, Ctx } = createModal({
 	modal1: {
 		title: "Modal 1",
@@ -135,7 +142,7 @@ export const { Provider, Ctx } = createModal({
 			name: Type.String(),
 			age: Type.Number()
 		}),
-		content: <div>Modal 1</div>,
+		content: <Modal1 />,
 	},
 	modal2: {
 		title: "Modal 2",
@@ -145,6 +152,9 @@ export const { Provider, Ctx } = createModal({
 		content: <div>Modal 2</div>,
 	},
 })
+
+
+
 
 // export const {  useModal1, useModal2 }  = use(Ctx)
 // export const hook = () => use(Ctx)

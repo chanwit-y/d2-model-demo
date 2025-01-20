@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Test } from "./example/Test";
 import Optimistic from "./example/optimistic";
+import { Query } from "./example/query";
 // import DemoContext from "./example/context/DemoContext";
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
      {/* <Test />  */}
      {/* <Optimistic /> */}
      {/* <DemoContext /> */}
+     <Query />
     </div>
   );
 }

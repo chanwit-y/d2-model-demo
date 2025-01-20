@@ -1,5 +1,6 @@
 import React from 'react'
 import { ModelTable } from './ModelTable'
+import { DataModel } from './DataModel'
 
 export const ModelDetail = () => {
 	return (
@@ -23,6 +24,7 @@ export const ModelDetail = () => {
 					</svg>
 				</button> */}
 			</div>
+			<DataModel />
 			{/* <ModelTable /> */}
 		</div>
 	)
