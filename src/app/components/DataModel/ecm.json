@@ -1,0 +1,59 @@
+{
+	"document": {
+		"regeEx": [
+			"^(APV)-(\\w+)-([\\d, ]+)-(\\d+)-(\\d{2}\\/\\d{2}\\/\\d{2})$"
+		],
+		"split": [
+			{
+				"by": "-",
+				"fields": [
+					"qr_type",
+					"qr_company",
+					{
+						"by": ",",
+						"fields": [
+							"qr_invoices"
+						],
+						"optional": {
+							"isSorted": true
+						}
+					},
+					"qr_customerID",
+					"qr_transactionDate"
+				],
+				"optional": {}
+			}
+		],
+		"isCheckin": false,
+		"rotate": 90,
+		"insertTransectionList": true,
+		"map2Sp": [
+			{
+				"from": "type",
+				"to": "type"
+			},
+			{
+				"from": "company",
+				"to": "company"
+			},
+			{
+				"from": "customerID",
+				"to": "customerID"
+			},
+			{
+				"from": "transactionDate",
+				"to": "transactionDate"
+			},
+			{
+				"from": "invoices",
+				"to": "invoices"
+			}
+		],
+		"permission": [
+			{
+				"company": ["01-BANPU", ""],
+				"groups": ["Acct-Treasury-BPPUS-BPPPT", "Procurement-BPNE"] 
+			}
+		]
+	}
+}

@@ -4,7 +4,7 @@ import { DataModel } from './DataModel'
 
 export const ModelDetail = () => {
 	return (
-		<div className="p-2 mx-auto h-[calc(100vh-6rem)] rounded-md dark:bg-slate-800 ">
+		<div className="p-2 mx-auto h-[calc(100vh-6rem)] rounded-md dark:bg-slate-800 overflow-y-scroll ">
 			<div className='flex justify-between items-center  p-4 pb-0'>
 				<p className=' text-lg font-bold'>
 					Model Detail
