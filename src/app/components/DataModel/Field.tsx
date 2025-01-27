@@ -1,18 +1,40 @@
-import React from 'react'
+import React, { ChangeEvent, useCallback, useEffect } from 'react'
 import { IField } from './@types'
+import { useModel } from './Context'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
 type Props = {
 	field: IField
+	name: string
 }
 
-export const Field = ({ field }: Props) => {
+export const Field = ({ field, name }: Props) => {
+
+	// const { idIsMap, setIdIsMap } = useModel()
+
+	const { register, getValues, control, setValue } = useFormContext();
+	const { append } = useFieldArray({
+		control: control, // control props comes from useForm (optional: if you are using FormProvider)
+		name: `${name}.fields`, // unique name for your Field Array
+	});
+
+	const selectDataTypeHandler = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+		const { value } = e.target
+		console.log('value', value)
+		if (value === 'map') {
+			console.log('field.id ========>', field.id)
+			append({ id: '2', name: 'newField', type: 'string', fields: [] })
+			setValue(`${name}.type`, value)
+		}
+	}, [append])
+
 	return (
 		<div className='flex items-end gap-2 '>
 			<label className="form-control max-w-56">
 				<div className="label p-1">
 					<span className="label-text text-xs">Field</span>
 				</div>
-				<input className='input input-bordered input-sm' type="text" />
+				<input {...register(`${name}.name`)} className='input input-bordered input-sm' type="text" />
 			</label>
 
 
@@ -20,14 +42,18 @@ export const Field = ({ field }: Props) => {
 				<div className="label p-1">
 					<span className="label-text text-xs">Type</span>
 				</div>
-				<select className="select select-bordered select-sm max-w-xs">
+				<select {...register(`${name}.type`)} className="select select-bordered select-sm max-w-xs"
+					onChange={selectDataTypeHandler}>
 					<option disabled >What is data type?</option>
-					<option >map</option>
+					<option>map</option>
 					<option selected>string</option>
 				</select>
 			</label>
 
-			<button className='mb-1 btn btn-sm btn-circle btn-outline btn-info'>
+			<button className='mb-1 btn btn-sm btn-circle btn-outline btn-info'
+				onClick={() => {
+					console.log(getValues(name))
+				}}>
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5h6v6H3zm2 2v2h2V7zm6 0h10v2H11zm0 8h10v2H11zm-6 5l-3.5-3.5l1.41-1.41L5 17.17l4.59-4.58L11 14z" /></svg>
 			</button>
 
