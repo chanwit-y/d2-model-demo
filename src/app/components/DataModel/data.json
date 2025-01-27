@@ -2,75 +2,7 @@
 	"model": {
 		"name": "model a",
 		"fields": [
-			{
-				"id": "550e8400-e29b-41d4-a716-446655440000",
-				"name": "field a",
-				"type": "string",
-				"fields": []
-			},
-			{
-				"id": "550e8400-e29b-41d4-a716-446655440001",
-				"name": "field b",
-				"type": "number",
-				"fields": []
-			},
-			{
-				"id": "550e8400-e29b-41d4-a716-446655440002",
-				"name": "field c",
-				"type": "map",
-				"fields": [
-					{
-						"id": "550e8400-e29b-41d4-a716-446655440003",
-						"name": "field c1",
-						"type": "string",
-						"fields": []
-					},
-					{
-						"id": "550e8400-e29b-41d4-a716-446655440004",
-						"name": "field c2",
-						"type": "number",
-						"fields": []
-					},
-					{
-						"id": "550e8400-e29b-41d4-a716-446655440005",
-						"name": "field c3",
-						"type": "map",
-						"fields": [
-							{
-								"id": "550e8400-e29b-41d4-a716-446655440006",
-								"name": "field c3a",
-								"type": "string",
-								"fields": []
-							},
-							{
-								"id": "550e8400-e29b-41d4-a716-446655440007",
-								"name": "field c3a",
-								"type": "string",
-								"fields": []
-							},
-							{
-								"id": "550e8400-e29b-41d4-a716-446655440008",
-								"name": "field c3b",
-								"type": "map",
-								"fields": [
-									{
-										"id": "550e8400-e29b-41d4-a716-446655440009",
-										"name": "field c3b1",
-										"type": "string",
-										"fields": []
-									},
-									{
-										"id": "550e8400-e29b-41d4-a716-446655440010",
-										"name": "field c3b2",
-										"type": "string",
-										"fields": []
-									}
-								]
-							}
-						]
-					}
-				]
-			}
+		
 		]
 	}
 }

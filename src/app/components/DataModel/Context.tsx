@@ -2,7 +2,7 @@
 
 import { createContext, Dispatch, ReactNode, SetStateAction, use, useCallback, useEffect, useState } from "react"
 import { IField } from "./@types";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { FormProvider, useFieldArray, useForm, UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { fieldSchema, modelSchema, TField, TModel } from "./schema";
 
@@ -16,7 +16,7 @@ type TContext = {
 const Context = createContext<TContext>({} as TContext)
 
 type Props = {
-	children: (root: TField[], name: string) => ReactNode
+	children: (root: TField[], name: string, register: UseFormRegister<TModel>) => ReactNode
 	// children:  ReactNode
 	init: IField[]
 	data: TModel;
@@ -27,21 +27,24 @@ const Provider = ({ children, data }: Props) => {
 	const f = useForm({
 		resolver: zodResolver(modelSchema,),
 		defaultValues: data,
-		mode: 'all' 
+		mode: 'all'
 	})
+
+	// f.register
 
 	const { fields } = useFieldArray({
 		control: f.control, // control props comes from useForm (optional: if you are using FormProvider)
 		name: "model.fields", // unique name for your Field Array
-	
+
 	});
 
 
-	return <Context value={{   }}>
-		{/* <pre>{JSON.stringify(idIsMap, null, 2)}</pre> */}
+	return <Context value={{}}>
 		<FormProvider {...f}>
-			<button onClick={() => console.log(f.getValues(`model.fields.${2}`))}>Get Values</button>
-			{children(fields, 'model.fields')}
+			<button onClick={f.handleSubmit((d) => { 
+				console.log(d)
+			})}>Get Values</button>
+			{children(fields, 'model.fields', f.register)}
 		</FormProvider>
 	</Context>
 }

@@ -5,16 +5,11 @@ import { useModel } from './Context'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 type Props = {
-	// mapId: string
 	fields: IField[]
 	name: string
 }
 
 export const NodeList = ({  name }: Props) => {
-
-	// const { setIdIsMap, idIsMap } = useModel()
-
-	// const {watch} = useFormContext()
 
 	const { fields,  append } = useFieldArray({
 		control: useFormContext().control, // control props comes from useForm (optional: if you are using FormProvider)

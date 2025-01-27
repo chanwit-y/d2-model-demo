@@ -5,7 +5,7 @@ import { Ctx } from '../lib/modal/ModalFactory';
 // import { useModal1 } from '../lib/modal/ModalFactory';
 
 export const ModelList = () => {
-	const { m: { modal1, modal2 } } = use(Ctx)
+	// const { m: { modal1, modal2 } } = use(Ctx)
 
 	// useEffect(() => {
 	// 	// const { show } = initModal(<p className="py-4">Press ESC key or click the button below to close</p>)
@@ -14,17 +14,17 @@ export const ModelList = () => {
 	// 	modal1().show({ name: "John", age: 20 })
 	// }, [])
 
-	const showModelHandler = useCallback(() => {
-		modal1().show({ name: "John", age: 20 })
-	}, [])
+	// const showModelHandler = useCallback(() => {
+	// 	modal1().show({ name: "John", age: 20 })
+	// }, [])
 
-	const showModelHandler2 = useCallback(() => {
-		modal2().show({ age: 20 })
-	}, [])
+	// const showModelHandler2 = useCallback(() => {
+	// 	modal2().show({ age: 20 })
+	// }, [])
 
 	return (
-		<div className='bg-base-200 p-2 rounded-lg w-full max-w-xs h-[calc(100vh-6rem)]'>
-			<button className="btn btn-ghost text-accent" onClick={showModelHandler}  >
+		<div className='dark:bg-slate-800 p-2 rounded-lg w-full h-[calc(100vh-6rem)]'>
+			{/* <button className="btn btn-ghost text-accent" onClick={showModelHandler}  >
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					className="h-6 w-6 "
@@ -53,7 +53,7 @@ export const ModelList = () => {
 						d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
 				</svg>
 				Start collection
-			</button>
+			</button> */}
 			<ul className="menu menu-xs ">
 				<li>
 					<a>
