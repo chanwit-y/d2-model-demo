@@ -27,7 +27,7 @@ export const NodeList = ({  name }: Props) => {
 
 			<div className='flex '>
 				<div className='ml-6  border-l border-b border-dashed border-gray-500 w-5 h-5'></div>
-				<button className='mt-2 btn btn-xs btn-circle btn-outline btn-success'
+				<button className='mt-2 btn btn-xs btn-square btn-outline btn-success'
 					onClick={() => {
 						const newIdIsMap: IField = {
 							id: "1",
