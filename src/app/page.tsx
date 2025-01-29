@@ -3,6 +3,7 @@ import { Test } from "./example/Test";
 import Optimistic from "./example/optimistic";
 import { Query } from "./example/query";
 import { Ex } from "./example/Ex";
+import { FormEx } from "./example/form";
 // import DemoContext from "./example/context/DemoContext";
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
      {/* <Optimistic /> */}
      {/* <DemoContext /> */}
      {/* <Query /> */}
-     <Ex />
+     <FormEx />
     </div>
   );
 }

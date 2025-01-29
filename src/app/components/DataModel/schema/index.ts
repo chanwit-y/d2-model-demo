@@ -62,3 +62,20 @@ modelSchema.parse({
     ],
   },
 });
+
+// const ZodTest = z
+//   .object({
+//     name: z.string(),
+//     age: z.number(),
+//   })
+//   .refine((data) => data.age >= 33 && data.name === "someone", {
+//     message: "Age must be greater than 33",
+//     path: ["name"],
+//   });
+
+
+
+// ZodTest.parse({
+//   name: "someonex",
+//   age: 33,
+// });
