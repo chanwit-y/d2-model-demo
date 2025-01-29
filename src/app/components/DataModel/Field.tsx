@@ -2,6 +2,7 @@ import React, { ChangeEvent, useCallback, useEffect } from 'react'
 import { IField } from './@types'
 import { useModel } from './Context'
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import { Popover } from 'radix-ui'
 
 type Props = {
 	// field: IField
@@ -68,14 +69,19 @@ export const Field = ({ name }: Props) => {
 				<input type="checkbox" className="checkbox checkbox-accent" />
 			</label>
 
-
-			<button className='mt-6 btn btn-xs btn-square btn-outline btn-info'
-				onClick={() => {
-					console.log(getValues(name))
-				}}>
-				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512"><path fill="currentColor" fill-rule="evenodd" d="m234.67 85.33l-.004 213.338h-21.333v42.666h21.333l.005 85.33h42.666l-.004-85.33h21.333v-42.666h-21.333l.004-213.338zm-128.006 0v85.355H85.331v42.645h21.333v213.333h42.667V213.33h21.333v-42.645h-21.333V85.33zm255.981.004v128h-21.333l.013 42.663h21.333v170.666h42.688V255.997h21.333l-.013-42.663h-21.333l.013-128.004z" /></svg>
-				{/* <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5h6v6H3zm2 2v2h2V7zm6 0h10v2H11zm0 8h10v2H11zm-6 5l-3.5-3.5l1.41-1.41L5 17.17l4.59-4.58L11 14z" /></svg> */}
-			</button>
+			<Popover.Root>
+				<Popover.Trigger asChild>
+					<button className='mt-6 btn btn-xs btn-square btn-outline btn-info'>
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512"><path fill="currentColor" fill-rule="evenodd" d="m234.67 85.33l-.004 213.338h-21.333v42.666h21.333l.005 85.33h42.666l-.004-85.33h21.333v-42.666h-21.333l.004-213.338zm-128.006 0v85.355H85.331v42.645h21.333v213.333h42.667V213.33h21.333v-42.645h-21.333V85.33zm255.981.004v128h-21.333l.013 42.663h21.333v170.666h42.688V255.997h21.333l-.013-42.663h-21.333l.013-128.004z" /></svg>
+					</button>
+				</Popover.Trigger>
+				<Popover.Portal>
+					<Popover.Content side='right' align='center' sideOffset={3} className="rounded-md p-4 w-40 bg-white">
+						Some content
+						<Popover.Arrow className="fill-white" />
+					</Popover.Content>
+				</Popover.Portal>
+			</Popover.Root>
 
 
 			{/* <button className='mb-1 btn btn-sm btn-square btn-outline btn-info'>
