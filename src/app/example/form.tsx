@@ -2,44 +2,45 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useEffect, useMemo } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { z } from 'zod';
+import { FormArr } from './form_arr';
+import { FormMain } from './form_main';
 
 
 const Schema = z.object({
 	example: z.string(),
 	exampleRequired: z.string().nonempty("This field is required"),
+	exArr: z.array(z.object({
+		name: z.string().nonempty("This field is required"),
+		age: z.string()
+	})).min(1, "At least one item is required"),
 });
 
 export const FormEx = () => {
 
-	const { register, handleSubmit, watch, formState: { errors } } = useForm({
+	const form = useForm({
 		resolver: zodResolver(Schema),
 		mode: 'all'
 	});
-	// const onSubmit = (data: any) => console.log(data);
 
-	// console.log(watch("example")); // watch input value by passing the name of it
 	useEffect(() => {
-		console.log(errors)
-	}, [errors])
+		console.log(form.formState.errors)
+	}, [form.formState.errors])
 
-	const err = useMemo(() => errors["exampleRequired"], [errors])
 
 
 	return (
-		<form >
-			<input {...register("example")} />
-
-			<input {...register("exampleRequired")} />
-			{String(err?.message)}
-			<br />
-			<button
-				onClick={handleSubmit((data) => {
-					console.log('Hi')
-					console.log(data)
-				})}
-			>Test</button>
-		</form>
+		<FormProvider {...form} >
+			<div className='flex flex-col gap-2 max-w-sm'>
+				<FormMain />
+				<FormArr />
+				<button className='btn btn-primary'
+					onClick={form.handleSubmit((data) => {
+						console.log(data)
+					})}
+				>Submit</button>
+			</div>
+		</FormProvider>
 	)
 }
