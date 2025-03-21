@@ -45,7 +45,8 @@ export const Node = ({ field, name }: Props) => {
 					<div className='ml-6  border-l  border-dashed border-gray-500 w-5 h-4'></div>
 				</div>
 
-				<Field field={field} name={name} />
+				{/* <Field field={field} name={name} /> */}
+				<Field  name={name} />
 
 
 			</div>
