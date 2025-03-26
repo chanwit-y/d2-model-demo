@@ -25,7 +25,15 @@ export default function ColumnItem() {
 				</Handle>
 
 				<div className='flex relative -left-3 items-center'>
-					<div className=' text-white cursor-move'>
+					<div className=' text-white cursor-move'
+					onMouseDown={(e) => {
+						// e.stopPropagation();
+						console.log('down')
+					}}
+					 onMouseUp={(e) => {
+						// e.stopPropagation();
+						console.log('up')
+					}}>
 						<DragIndicator />
 					</div>
 					<span>Hi</span>
