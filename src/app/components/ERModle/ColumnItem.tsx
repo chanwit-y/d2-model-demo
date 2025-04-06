@@ -1,9 +1,12 @@
 
 import { Handle, Position } from '@xyflow/react'
-import React from 'react'
+import React, { use } from 'react'
 import { DragIndicator } from '../asset/icon/DragIndicator'
+import { Context } from './Context'
 
 export default function ColumnItem() {
+	const { setNodes } = use(Context)
+
 	return (
 		<div className='flex py-2 flex-col'>
 			<div className='flex bg-red-600'>
@@ -26,14 +29,33 @@ export default function ColumnItem() {
 
 				<div className='flex relative -left-3 items-center'>
 					<div className=' text-white cursor-move'
-					onMouseDown={(e) => {
-						// e.stopPropagation();
-						console.log('down')
-					}}
-					 onMouseUp={(e) => {
-						// e.stopPropagation();
-						console.log('up')
-					}}>
+						// onMouseDown={(e) => {
+						// 	// e.stopPropagation();
+						// 	//TODO: set dragHandle
+						// 	console.log('down')
+						// 	setNodes((nodes: any) => {
+						// 		return nodes.map((node: any) => {
+						// 			if (node.id === 'node-1') {
+						// 				return { ...node, dragHandle: '.drag-handle__custom' }
+						// 			}
+						// 			return node
+						// 		})
+						// 	})
+						// }}
+						// onMouseUp={(e) => {
+						// 	// e.stopPropagation();
+						// 	//TODO: remove dragHandle
+						// 	console.log('up')
+						// 	setNodes((nodes: any) => {
+						// 		return nodes.map((node: any) => {
+						// 			if (node.id === 'node-1') {
+						// 				return { ...node, dragHandle: undefined }
+						// 			}
+						// 			return node
+						// 		})
+						// 	})
+						// }}
+						>
 						<DragIndicator />
 					</div>
 					<span>Hi</span>

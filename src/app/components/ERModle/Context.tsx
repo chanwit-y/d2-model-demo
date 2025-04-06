@@ -1,7 +1,7 @@
 
 import type { Node, Edge, OnNodesChange, OnEdgesChange } from '@xyflow/react';
 import { addEdge, useEdgesState, useNodesState } from "@xyflow/react";
-import { createContext, Dispatch, ReactNode, SetStateAction, useCallback, useMemo } from "react"
+import { createContext, Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useMemo } from "react"
 import { EntityNode } from "./EntityNode";
 
 type TContext = {
@@ -16,7 +16,7 @@ const initialNodes = [
 	{
 		id: 'node-1',
 		type: 'textUpdater',
-		dragHandle: '.drag-handle__custom',
+		// dragHandle: '.drag-handle__custom',
 		position: { x: 0, y: 0 },
 		data: { value: 123 },
 	},
@@ -51,7 +51,11 @@ export default function Provider({ children }: Props) {
 		[setEdges],
 	);
 
-	return (<Context value={{setNodes}}>
+
+
+	return (<Context value={{ setNodes }}>
 		{children(nodes, onNodesChange, edges, onEdgesChange, nodeTypes, onConnect)}
 	</Context>)
 }
+
+export { Context }
