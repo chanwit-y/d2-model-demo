@@ -14,6 +14,8 @@ export default function JsonModel({ }: Props) {
 
 	const nodeTypes = useMemo(() => initNodeTypes, []);
 
+
+
 	useEffect(() => {
 		document.querySelector('.react-flow__panel.react-flow__attribution')?.remove()
 	}, [])
@@ -31,7 +33,7 @@ export default function JsonModel({ }: Props) {
 				nodeTypes={nodeTypes}
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
-				// onConnect={onConnect}
+				fitView
 			>
 				<Controls />
 				<MiniMap />

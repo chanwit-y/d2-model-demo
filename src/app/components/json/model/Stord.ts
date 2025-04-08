@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Edge, Node } from "@xyflow/react";
 import { JsonEntity } from "./JsonEntity";
 import data from "./data/input.json";
+import { rawdata } from "./data/oe";
 
 type TStord = {
   initialNodes: any[];
@@ -56,10 +57,12 @@ export const Json2Nodes = (
 
   //Note: Can be transformed to a single object
   //Todo: move this to a extension
+  const p = res.length > 0 ? res[res.length - 1] : { position: { x: 0, y: 0 } };
+
   const flowObj = {
     id: `${bfo}-${id}`,
     type: "JsonEntity",
-    position: { x: 0, y: 0 },
+    position: {x: p.position.x - 280, y: p.position.y - 100},
     data: {
       model: {
         name: bfo,
@@ -79,8 +82,6 @@ export const Json2Nodes = (
   };
 
   res.push(flowObj);
-
-  //   return obj;
 };
 
 export const Nodes2Edges = (nodes: Node<TNodeJModel>[]) => {

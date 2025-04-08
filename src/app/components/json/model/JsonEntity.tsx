@@ -13,7 +13,7 @@ export const JsonEntity = ({ data }: Props) => {
 	// }, [data])
 
 	return (
-		<div className='p-2 bg-white'>
+		<div className='p-2 bg-white rounded-md'>
 			<div className='flex relative'>
 				<span className=' px-2 font-bold text-lg text-black tracking-wide '>{data.model.name}</span>
 				{data.model.targetHandle && data.model.targetHandle !== ""
@@ -26,10 +26,11 @@ export const JsonEntity = ({ data }: Props) => {
 			<div className='flex flex-col gap-2'>
 				{
 					data.model.fields.map((item: any, index: number) =>
-					(<div key={`jsonItem-${index}`} className='flex relative '>
-						<span>
-							{item.name}
+					(<div key={`jsonItem-${index}`} className='flex relative hover:bg-gray-100 p-2 rounded-md cursor-pointer'>
+						<span className='px-2 font-bold text-sm text-black tracking-wide '>
+							{item.name}:
 						</span>
+						<span className='px-2 font-bold text-sm  text-gray-700  tracking-wide '>{String(item.value)}</span>
 						{item.sourceHandle && item.sourceHandle !== ""
 							&& <ItemHandle
 								id={item.sourceHandle}
