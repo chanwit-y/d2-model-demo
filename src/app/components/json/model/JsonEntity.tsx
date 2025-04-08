@@ -1,6 +1,5 @@
-import { Handle, Node, Position } from '@xyflow/react'
-import React, { useEffect } from 'react'
-import { json2Flow } from './Stord'
+import React from 'react'
+import { Position } from '@xyflow/react'
 import { ItemHandle } from './ItemHandle'
 
 type Props = {
@@ -9,9 +8,9 @@ type Props = {
 
 export const JsonEntity = ({ data }: Props) => {
 
-	useEffect(() => {
-		console.log(json2Flow(data, "batch"))
-	}, [data])
+	// useEffect(() => {
+	// 	console.log(json2Flow(data, "batch"))
+	// }, [data])
 
 	return (
 		<div className='p-2 bg-white'>
@@ -27,7 +26,7 @@ export const JsonEntity = ({ data }: Props) => {
 			<div className='flex flex-col gap-2'>
 				{
 					data.model.fields.map((item: any, index: number) =>
-					(<div className='flex relative '>
+					(<div key={`jsonItem-${index}`} className='flex relative '>
 						<span>
 							{item.name}
 						</span>
@@ -39,9 +38,6 @@ export const JsonEntity = ({ data }: Props) => {
 					</div>))
 				}
 			</div>
-			<pre>
-				{JSON.stringify(data, null, 2)}
-			</pre>
 		</div>
 	)
 }

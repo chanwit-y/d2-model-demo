@@ -46,6 +46,21 @@
 						"LineAccount": "",
 						"DiscountAmount": 0,
 						"QTY": 0
+					},
+{
+						"INVOICE_LINE_ID": 0,
+						"INVOICE_ID": 0,
+						"LineNo": 0,
+						"LineDescription": "",
+						"AmountInclTax": 0,
+						"AmountExclTax": 0,
+						"TaxAmount": 0,
+						"TaxRate": 0,
+						"LineType": "",
+						"LineSubType": "",
+						"LineAccount": "",
+						"DiscountAmount": 0,
+						"QTY": 0
 					}
 
 				]

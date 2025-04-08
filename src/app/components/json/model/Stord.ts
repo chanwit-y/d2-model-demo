@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { v4 as uuidv4 } from "uuid";
+import { Edge, Node } from "@xyflow/react";
 import { JsonEntity } from "./JsonEntity";
 import data from "./data/input.json";
 
@@ -8,166 +10,109 @@ type TStord = {
   initNodeTypes: Record<string, any>;
 };
 
-export const R = (data: Record<string, any>, res: any[] = []) => {
-  const obj: any[] = [];
+export type TNodeJModel = {
+  model: {
+    name: string;
+    targetHandle: string;
+    sourceId: string;
+    paths: string[];
+    fields: {
+      name: string;
+      type: string;
+      value: any;
+      sourceHandle?: string;
+    }[];
+  };
+};
+
+type JObject = {
+  id: string;
+  key: string;
+  value: any;
+  isObject: boolean;
+};
+
+export const Json2Nodes = (
+  data: Record<string, any>,
+  bfo: string = "",
+  sourceId: string = "",
+  paths: string[] = [],
+  res: Node<TNodeJModel>[] = []
+) => {
+  const id = uuidv4();
+  const obj: JObject[] = [];
   Object.entries(data).forEach(([key, value]) => {
-    if (typeof value === "object" && value !== null) {
-      if (value instanceof Array) {
-        for (let item of value) {
-          R(item, res);
-        }
-      } else {
-        R(value, res);
-      }
-    }
-    obj.push(key);
-  });
-
-  res.push(obj);
-
-  return obj;
-};
-
-export const json2Flow = (d: Record<string, any>, k: string) => {
-  let data: Record<string, any> = {};
-  const nodes = [];
-  const edges = [];
-
-  Object.entries(d).map(([key, value]) => {
-    //     console.log("key", key, typeof value);
-    if (typeof value === "object" && value !== null) {
-      //       console.log("object", value);
-      data[key] = `object of ${k}`;
-      const { _d, _n } = json2Flow(value, key);
-      nodes.push(..._n);
-    } else {
-      //       console.log("value", value);
-      data[key] = value;
+    const isObject = typeof value === "object" && value !== null;
+    if (isObject) {
+      value instanceof Array
+        ? value.forEach((item) =>
+            Json2Nodes(item, key, id, [...paths, key], res)
+          )
+        : Json2Nodes(value, key, id, [...paths, `${key}`], res);
     }
 
-    //     nodes.push({
-    //       id: key,
-    //       type: "JsonModel",
-    //       position: { x: 0, y: 0 },
-    //       data: value,
-    //     });
+    obj.push({ id, key, value, isObject });
   });
 
-  nodes.push(data);
+  //Note: Can be transformed to a single object
+  //Todo: move this to a extension
+  const flowObj = {
+    id: `${bfo}-${id}`,
+    type: "JsonEntity",
+    position: { x: 0, y: 0 },
+    data: {
+      model: {
+        name: bfo,
+        targetHandle: `${bfo}-${id}-target`,
+        sourceId,
+        paths,
+        fields: obj.map((item) => {
+          return {
+            name: item.key,
+            type: item.isObject ? "object" : typeof item.value,
+            value: item.value,
+            sourceHandle: item.isObject ? `${item.key}-${id}-source` : "",
+          };
+        }),
+      },
+    },
+  };
 
-  return { _d: data, _n: nodes };
-  //   console.log("data", data);
+  res.push(flowObj);
+
+  //   return obj;
 };
 
-export const useStore = create<TStord>()((set) => ({
-  initialNodes: [
-    //     { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
-    //     { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
-    //     {
-    //       id: "node-1",
-    //       type: "JsonModel",
-    //       position: { x: 0, y: 0 },
-    //       data,
-    //     },
-    {
-      id: "root",
-      type: "JsonModel",
-      position: { x: 0, y: 0 },
-      data: {
-        model: {
-          name: "root",
-          fields: [
-            {
-              name: "batch",
-              type: "object",
-              value: {},
-              //       targetHandle: "",
-              sourceHandle: "a",
-            },
-          ],
-        },
-      },
-    },
-    {
-      id: "batch-0",
-      type: "JsonModel",
-      position: { x: 50, y: 50 },
-      data: {
-        model: {
-          name: "batch",
+export const Nodes2Edges = (nodes: Node<TNodeJModel>[]) => {
+  const edges: Edge[] = [];
+  nodes.reverse().forEach((item) => {
+    const { paths } = item.data.model;
 
-          targetHandle: "b",
-          //   sourceHandle: "",
+    if (paths.length > 1) {
+      const edge = {
+        id: uuidv4(),
+        source: `${paths[paths.length - 2]}-${item.data.model.sourceId}`,
+        target: `${item.id}`,
+        sourceHandle: `${paths[paths.length - 1]}-${
+          item.data.model.sourceId
+        }-source`,
+        targetHandle: `${item.data.model.targetHandle}`,
+        // type: "smoothstep",
+        animated: true,
+        style: { strokeWidth: 2, stroke: "red" },
+      };
+      edges.push(edge);
+    }
+  });
+  return edges;
+};
 
-          fields: [
-            {
-              name: "ExternalJobID",
-              type: "string",
-              value: "1234567890",
-            },
-            {
-              name: "Headers",
-              type: "object",
-              value: {},
-              sourceHandle: "h",
-            },
-          ],
-        },
-      },
-    },
-    {
-      id: "header-0",
-      type: "JsonModel",
-      position: { x: 50, y: 50 },
-      data: {
-        model: {
-          name: "header",
-          targetHandle: "h1",
-          fields: [],
-        },
-      },
-    },
-    {
-      id: "header-1",
-      type: "JsonModel",
-      position: { x: 50, y: 50 },
-      data: {
-        model: {
-          name: "header",
-          targetHandle: "h2",
-          fields: [],
-        },
-      },
-    },
-  ],
-  initialEdges: [
-    //     { id: "e1-2", source: "1", target: "2" },
-    //     { id: 'e2-1', source: '2', target: 'node-1', targetHandle: 'a' },
-    // { id: 'e2-2', source: '2', target: 'node-1', targetHandle: 'b' }
-    {
-      id: "a",
-      source: "root",
-      target: "batch-0",
-      sourceHandle: "a",
-      targetHandle: "b",
-      //       type: "smoothstep",
-    },
-    {
-      id: "b",
-      source: "batch-0",
-      target: "header-0",
-      sourceHandle: "h",
-      targetHandle: "h1",
-      //       type: "smoothstep",
-    },
-    {
-      id: "c",
-      source: "batch-0",
-      target: "header-1",
-      sourceHandle: "h",
-      targetHandle: "h2",
-      //       type: "smoothstep",
-    },
-  ],
-  initNodeTypes: { JsonModel: JsonEntity }, // Add your custom node types here
-}));
+export const useStore = create<TStord>()((set) => {
+  const nodes: Node<TNodeJModel>[] = [];
+  Json2Nodes(data, "root", uuidv4(), ["root"], nodes);
+  return {
+    initialNodes: nodes,
+    initialEdges: Nodes2Edges(nodes),
+    initNodeTypes: { JsonEntity },
+  };
+});
