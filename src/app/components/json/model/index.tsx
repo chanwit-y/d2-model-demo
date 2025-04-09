@@ -1,8 +1,9 @@
-
+'use client'
 import { useEffect, useMemo } from "react"
 import { Background, BackgroundVariant, Controls, MiniMap, Node, ReactFlow, useEdgesState, useNodesState } from "@xyflow/react";
-import { TNodeJModel, useStore } from "./Stord";
+import {  useStore } from "./Stord";
 import '@xyflow/react/dist/style.css';
+import { TNodeJModel } from "./JModel";
 
 
 type Props = {}
@@ -13,8 +14,6 @@ export default function JsonModel({ }: Props) {
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
 	const nodeTypes = useMemo(() => initNodeTypes, []);
-
-
 
 	useEffect(() => {
 		document.querySelector('.react-flow__panel.react-flow__attribution')?.remove()
