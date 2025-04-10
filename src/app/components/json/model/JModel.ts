@@ -57,7 +57,7 @@ class JModel {
     const flowObj = {
       id: `${bfo}-${id}`,
       type: "JsonEntity",
-      position: { x: p.position.x - 280, y: p.position.y - 100 },
+      position: { x: p.position.x - 600, y: p.position.y - 200 },
       data: {
         model: {
           name: bfo,
@@ -95,7 +95,7 @@ class JModel {
           targetHandle: `${item.data.model.targetHandle}`,
           // type: "smoothstep",
           animated: true,
-          style: { strokeWidth: 2, stroke: "red" },
+          style: { strokeWidth: 2, stroke: "oklch(82.8% 0.111 230.318)" },
         };
         edges.push(edge);
       }
@@ -123,3 +123,5 @@ class JModel {
 }
 
 export default new JModel();
+
+

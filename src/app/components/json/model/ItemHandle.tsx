@@ -14,8 +14,8 @@ export const ItemHandle = ({id, position}: Props) => {
 			style={{
 				position: 'absolute',
 				// top: 12,
-				right: position === Position.Right ? -8 : undefined,
-				left: position === Position.Left ? -8 : undefined,
+				right: position === Position.Right ? 14 : undefined,
+				left: position === Position.Left ? 14 : undefined,
 				width: 20,
 				height: 20,
 				// paddingTop: 4,

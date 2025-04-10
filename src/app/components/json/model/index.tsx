@@ -25,7 +25,7 @@ export default function JsonModel({ }: Props) {
 	}, [initialNodes, initialEdges])
 
 	return (
-		<div className="w-full h-[calc(100vh-7rem)] ">
+		<div className="w-full h-[calc(100vh-9rem)] px-4">
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}
