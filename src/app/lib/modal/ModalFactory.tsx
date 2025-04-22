@@ -48,13 +48,15 @@ type HookResult<P> = {
 type Hook<P> = () => HookResult<P>
 type TContext<C extends Config> = {
 	m: { [K in keyof C]: Hook<Static<C[K]["param"]>> }
-	param?: { [K in keyof C]: Static<C[K]["param"]> } 
-} 
+	param?: { [K in keyof C]: Static<C[K]["param"]> }
+}
 
 function createModal<C extends Config>(c: C): {
 	Provider: ({ children }: { children: ReactNode }) => ReactNode,
-	Ctx: Context<TContext<C>>
-} {
+	Ctx: Context<TContext<C>>,
+} & { [K in keyof C]: Hook<(C[K]["param"] & {
+	params: [];
+})["static"]>; } {
 
 	const registers: Record<string, ReactNode> = Object.keys(c).reduce((acc: Record<string, ReactNode>, key: string) => {
 		acc[key] = c[key].content
@@ -92,7 +94,7 @@ function createModal<C extends Config>(c: C): {
 			}
 
 			return _acc
-		}, {} as { [K in keyof C]: Hook<Static<C[K]["param"]>>})
+		}, {} as { [K in keyof C]: Hook<Static<C[K]["param"]>> })
 
 		const content = useMemo(() => current ? registers[current] : null, [registers, current])
 
@@ -126,8 +128,27 @@ function createModal<C extends Config>(c: C): {
 	}
 
 
+	const useModal = () => {
+		const ctx = use(Ctx)
+		return ctx.m
+	}
 
-	return { Provider, Ctx }
+
+	// type A<T extends { [K in keyof C]: Hook<Static<C[K]["param"]>> }> = {}
+	// const x = {...useModal()}
+
+	// type A = {
+	// 	Provider: ({ children }: {
+	// 		children: ReactNode;
+	// 	}) => JSX.Element;
+	// 	Ctx: Context<TContext<C>>;
+	// } & { [K in keyof C]: Hook<(C[K]["param"] & {
+	// 	params: [];
+	// })["static"]>; }
+
+
+
+	return { Provider, Ctx, ...useModal() }
 }
 
 
@@ -135,7 +156,7 @@ function createModal<C extends Config>(c: C): {
 
 
 
-export const { Provider, Ctx } = createModal({
+export const { Provider, Ctx, modal1, modal2 } = createModal({
 	modal1: {
 		title: "Modal 1",
 		param: Type.Object({
