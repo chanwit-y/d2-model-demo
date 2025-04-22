@@ -1,13 +1,28 @@
 import { use } from "react"
-import { Ctx } from "./ModalFactory"
+import { params } from "./ModalFactory"
+// import { Ctx } from "./ModalFactory"
 
 
 export const Modal1 = () => {
-	const { m, param} = use(Ctx)
+	// const { m, param} = use(Ctx)
+
+	const p = params()?.modal1
 
 	return <div>
-		<h1>{JSON.stringify(param?.modal1, null, 2)}</h1>
-		<p>{param?.modal1.name}</p>
-		<p>{param?.modal1.age}</p>
+		<h1>{JSON.stringify(p, null, 2)}</h1>
+		<p>{p?.name}</p>
+		<p>{p?.age}</p>
+	</div>
+}
+
+
+export const Modal2 = ({ age, text }: { age: number, text: string }) => {
+	// const { m, param} = use(Ctx)
+
+
+	return <div>
+		<h1>Modal 2</h1>
+		<h3>{text}</h3>
+		<p>{String(age)}</p>
 	</div>
 }

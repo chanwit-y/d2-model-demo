@@ -1,8 +1,8 @@
 "use client"
 
 import { TObject, Type, type Static } from '@sinclair/typebox'
-import { createContext, ReactNode, Context, use, useState, useEffect, useMemo } from 'react'
-import { Modal1 } from './Modal1'
+import { createContext, ReactNode, Context, use, useState, useEffect, useMemo, ComponentType, createElement } from 'react'
+import { Modal1, Modal2 } from './Modal1'
 
 // const config = {
 // 	useModal1: {
@@ -31,15 +31,23 @@ import { Modal1 } from './Modal1'
 // 	hook: T
 // }
 
+// type TContentWithParam<T> = (param: T) => ReactNode
+
 type TConfig = {
 	title: string,
 	param: TObject,
-	content: ReactNode,
+	content: ComponentType<any>,
 }
 
 type Config = {
-	[key: string]: TConfig
+	[key: string]: TConfig 
 }
+
+// type Config2<T extends Config, U extends Extract<keyof Config, string>> = {
+// 	[K in U]: T[K] & {
+// 		contentWithParam?: (param: Static<T[K]["param"]>) => ReactNode
+// 	}
+// }
 
 type HookResult<P> = {
 	show: (p: P) => void
@@ -47,33 +55,41 @@ type HookResult<P> = {
 }
 type Hook<P> = () => HookResult<P>
 type TContext<C extends Config> = {
-	m: { [K in keyof C]: Hook<Static<C[K]["param"]>> }
-	param?: { [K in keyof C]: Static<C[K]["param"]> }
-}
+	m: { [K in keyof C]: Hook<Static<C[K]["param"]>> };
+	params?: { [K in keyof C]: Static<C[K]["param"]> };
+};
 
+// function createModal<C extends Config>(c: C): {
+// 	Provider: ({ children }: { children: ReactNode }) => ReactNode,
+// 	Ctx: Context<TContext<C>>,
+// } & { [K in keyof C]: Hook<(C[K]["param"] & {
+// 	params: [];
+// })["static"]>; } {
 function createModal<C extends Config>(c: C): {
 	Provider: ({ children }: { children: ReactNode }) => ReactNode,
 	Ctx: Context<TContext<C>>,
-} & { [K in keyof C]: Hook<(C[K]["param"] & {
-	params: [];
-})["static"]>; } {
+	modals: () => { [K in keyof C]: Hook<Static<C[K]["param"]>> },
+	params: () => { [K in keyof C]: (C[K]["param"] & {
+		params: [];
+	})["static"]; } | undefined
+} {
 
-	const registers: Record<string, ReactNode> = Object.keys(c).reduce((acc: Record<string, ReactNode>, key: string) => {
-		acc[key] = c[key].content
+	const registers = Object.keys(c).reduce((acc: Record<string, ComponentType<any>  >, key: string) => {
+		acc[key] = c[key].content 
 		return acc
 	}, {})
 
-	console.log(registers)
 
 	const Ctx = createContext({} as TContext<C>)
 
 	// create hook for each modal
 
 	const Provider = ({ children }: { children: ReactNode }) => {
-		const [reg, setReg] = useState<Record<string, ReactNode>>(registers)
+		// const [reg, setReg] = useState<Record<string, ReactNode>>(registers)
+
 		const [isShow, setIsShow] = useState(false)
 		const [current, setCurrent] = useState<string>()
-		const [param, setParam] = useState<{ [K in keyof C]: Static<C[K]["param"]> }>()
+		const [params, setParams] = useState<{ [K in keyof C]: Static<C[K]["param"]> }>()
 
 		const m = Object.keys(c).reduce((_acc, key) => {
 
@@ -83,7 +99,7 @@ function createModal<C extends Config>(c: C): {
 						console.log(`Showing modal ${key} with params`, p)
 
 						// setContent(inits.find(i => i.k === k)?.c || null)
-						setParam(prev => ({ ...prev, [key]: p } as { [K in keyof C]: Static<C[K]["param"]> }))
+						setParams(prev => ({ ...prev, [key]: p } as { [K in keyof C]: Static<C[K]["param"]> }))
 						setIsShow(true)
 						setCurrent(key)
 					},
@@ -110,7 +126,7 @@ function createModal<C extends Config>(c: C): {
 
 		// console.log("hook", hook)
 
-		return <Ctx value={{ m, param }}>
+		return <Ctx value={{ m,  params }}>
 			<dialog id="modal" className="modal">
 				<div className="modal-box">
 					<h3 className="text-lg font-bold">Hello!</h3>
@@ -119,23 +135,15 @@ function createModal<C extends Config>(c: C): {
 						<button className="btn" onClick={() => setIsShow(false)}>Close</button>
 
 					</div> */}
-					{content}
+					{/* {content ?? <span>No Content</span>} */}
+					{content ? createElement(content, {...(params ? params[current as Extract<keyof C, string>] : {})}) : null}
+					{/* {content && typeof content === "function" ? content({ ...param }) : content ?? <span>No Content</span>} */}
 					<button className="btn" onClick={() => setIsShow(false)}>Close</button>
 				</div>
 			</dialog>
 			{children}
 		</Ctx>
 	}
-
-
-	const useModal = () => {
-		const ctx = use(Ctx)
-		return ctx.m
-	}
-
-
-	// type A<T extends { [K in keyof C]: Hook<Static<C[K]["param"]>> }> = {}
-	// const x = {...useModal()}
 
 	// type A = {
 	// 	Provider: ({ children }: {
@@ -146,31 +154,39 @@ function createModal<C extends Config>(c: C): {
 	// 	params: [];
 	// })["static"]>; }
 
+	const modals = () => {
+		return use(Ctx).m
+	}
 
+	const params = () => {
+		return use(Ctx).params
+	}
 
-	return { Provider, Ctx, ...useModal() }
+	return { Provider, Ctx, modals, params }
 }
 
 
 
 
 
-
-export const { Provider, Ctx, modal1, modal2 } = createModal({
+export const { Provider, Ctx, modals, params } = createModal({
 	modal1: {
 		title: "Modal 1",
 		param: Type.Object({
 			name: Type.String(),
 			age: Type.Number()
 		}),
-		content: <Modal1 />,
+		// content: Modal1,
+		content: Modal1 ,
 	},
 	modal2: {
 		title: "Modal 2",
 		param: Type.Object({
+			text: Type.String(),
 			age: Type.Number()
 		}),
-		content: <div>Modal 2</div>,
+		content: Modal2,
+		// contentWithParam: (param) => <div>Modal 2 - Age: {JSON.stringify(param, null, 2)}</div>,
 	},
 })
 

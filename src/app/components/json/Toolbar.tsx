@@ -1,10 +1,18 @@
 'use client'
+import { useEffect, useMemo } from 'react'
 import { IxImport } from '../asset/icon/IxImport'
 import { ListAltOutLineSharp } from '../asset/icon/ListAltOutLineSharp'
-import { modal1 } from '@/app/lib/modal/ModalFactory'
+import { modals } from '@/app/lib/modal/ModalFactory'
 
 export const Toolbar = () => {
-	const { show } = modal1()
+	const { show } = modals().modal2()
+	
+	// const x = useMemo(() => getModal().param?.modal1, []) 
+	// const { show } = modal1()
+
+	// useEffect(() => {
+	// 	console.log("x", x)
+	// }, [x])
 
 
 	return (
@@ -12,7 +20,7 @@ export const Toolbar = () => {
 			<div className='flex gap-2'>
 
 				<button className="btn btn-outline btn-sm btn-info btn-square"
-					onClick={() => show({ name: "test", age: 10 })}>
+					onClick={() => show({  age: 30, text: "Hello" })}>
 					<IxImport />
 				</button>
 			</div>
