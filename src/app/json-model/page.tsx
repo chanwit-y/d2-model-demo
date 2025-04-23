@@ -1,14 +1,16 @@
 import { Toolbar } from '../components/json/Toolbar';
 import JsonModel from '../components/json/model';
-import { Provider } from '../lib/modal/ModalFactory';
+import { ProviderJSONModal } from '../lib/config/modal';
 
 
 export default function App() {
 	return (
-		<Provider>
-			<Toolbar />
-			<JsonModel />
-		</Provider>
+		<ProviderJSONModal>
+			<>
+				<Toolbar />
+				<JsonModel />
+			</>
+		</ProviderJSONModal>
 
 	)
 }

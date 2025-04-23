@@ -1,8 +1,7 @@
 "use client"
 
-import { TObject, Type, type Static } from '@sinclair/typebox'
 import { createContext, ReactNode, Context, use, useState, useEffect, useMemo, ComponentType, createElement } from 'react'
-import { Modal1, Modal2 } from './Modal1'
+import { TLiteral, TObject, Type, type Static } from '@sinclair/typebox'
 
 // const config = {
 // 	useModal1: {
@@ -40,7 +39,7 @@ type TConfig = {
 }
 
 type Config = {
-	[key: string]: TConfig 
+	[key: string]: TConfig
 }
 
 // type Config2<T extends Config, U extends Extract<keyof Config, string>> = {
@@ -65,17 +64,50 @@ type TContext<C extends Config> = {
 // } & { [K in keyof C]: Hook<(C[K]["param"] & {
 // 	params: [];
 // })["static"]>; } {
-function createModal<C extends Config>(c: C): {
-	Provider: ({ children }: { children: ReactNode }) => ReactNode,
+
+type ModalOptions = {
+	providerName?: TLiteral | undefined
+}
+
+type ProviderProps<O extends ModalOptions> = O extends ModalOptions ?
+	O["providerName"] extends TLiteral
+	? Static<O["providerName"]> extends string
+	? {
+		[`P`]: ({ children }: { children: ReactNode }) => ReactNode
+	} : never
+	: never
+	: never;
+
+type X<O extends ModalOptions> = O["providerName"] extends infer U ? U extends TLiteral ? Static<U> extends string ? U : ""
+	: "" : ""
+
+
+const x = <O extends ModalOptions>(o: O): { [K in O["providerName"] extends TLiteral ? `X${Extract<Static<O["providerName"]>, string>}` : never]: any } => {
+	return {} as any
+}
+
+const y = x({ providerName: Type.Literal("XModal") })
+
+y.XXModal
+
+
+
+
+
+export function createModal<C extends Config, O extends ModalOptions = {}>(c: C, options?: O): {
+	// Provider: ({ children }: { children: ReactNode }) => ReactNode,
 	Ctx: Context<TContext<C>>,
 	modals: () => { [K in keyof C]: Hook<Static<C[K]["param"]>> },
 	params: () => { [K in keyof C]: (C[K]["param"] & {
 		params: [];
-	})["static"]; } | undefined
-} {
+	})["static"]; } | undefined,
+} & { [K in O["providerName"] extends TLiteral
+	? `Provider${Extract<Static<O["providerName"]>, string>}`
+	: "Provider"]
+	: ({ children }: { children: ReactNode }) => ReactNode } {
 
-	const registers = Object.keys(c).reduce((acc: Record<string, ComponentType<any>  >, key: string) => {
-		acc[key] = c[key].content 
+	const registers = Object.keys(c).reduce((acc: Record<string, ComponentType<any>>, key: string) => {
+		acc[key] = c[key].content
 		return acc
 	}, {})
 
@@ -126,7 +158,7 @@ function createModal<C extends Config>(c: C): {
 
 		// console.log("hook", hook)
 
-		return <Ctx value={{ m,  params }}>
+		return <Ctx value={{ m, params }}>
 			<dialog id="modal" className="modal">
 				<div className="modal-box">
 					<h3 className="text-lg font-bold">Hello!</h3>
@@ -136,7 +168,7 @@ function createModal<C extends Config>(c: C): {
 
 					</div> */}
 					{/* {content ?? <span>No Content</span>} */}
-					{content ? createElement(content, {...(params ? params[current as Extract<keyof C, string>] : {})}) : null}
+					{content ? createElement(content, { ...(params ? params[current as Extract<keyof C, string>] : {}) }) : null}
 					{/* {content && typeof content === "function" ? content({ ...param }) : content ?? <span>No Content</span>} */}
 					<button className="btn" onClick={() => setIsShow(false)}>Close</button>
 				</div>
@@ -162,33 +194,23 @@ function createModal<C extends Config>(c: C): {
 		return use(Ctx).params
 	}
 
-	return { Provider, Ctx, modals, params }
+	console.log(`Provider${options?.providerName}`)
+
+	return {
+		Ctx,
+		modals,
+		params,
+		[options?.providerName ? `Provider${options.providerName.const}`: "Provider"]: Provider,
+		// ...(options?.providerName
+		// 	? { [`Provider${options.providerName}`]: Provider }
+		// 	: { Provider }),
+	} as any 
 }
 
 
 
 
 
-export const { Provider, Ctx, modals, params } = createModal({
-	modal1: {
-		title: "Modal 1",
-		param: Type.Object({
-			name: Type.String(),
-			age: Type.Number()
-		}),
-		// content: Modal1,
-		content: Modal1 ,
-	},
-	modal2: {
-		title: "Modal 2",
-		param: Type.Object({
-			text: Type.String(),
-			age: Type.Number()
-		}),
-		content: Modal2,
-		// contentWithParam: (param) => <div>Modal 2 - Age: {JSON.stringify(param, null, 2)}</div>,
-	},
-})
 
 
 
