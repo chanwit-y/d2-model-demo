@@ -11,6 +11,7 @@ type Props = {
 	readonly?: boolean
 	useVim?: boolean
 	width?: number
+	onEdit?: (value: string) => void
 }
 
 const jsonLinter = () => {
@@ -37,7 +38,6 @@ const jsonLinter = () => {
 		return diagnostics;
 	});
 };
-
 
 function Editor({ height, width, readonly = false, useVim = false }: Props) {
 	const [value, setValue] = useState();

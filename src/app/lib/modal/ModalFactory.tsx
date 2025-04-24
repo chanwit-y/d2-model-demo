@@ -2,6 +2,7 @@
 
 import { createContext, ReactNode, Context, use, useState, useEffect, useMemo, ComponentType, createElement } from 'react'
 import { TLiteral, TObject, Type, type Static } from '@sinclair/typebox'
+import { LineMdClose } from '@/app/components/asset/icon/LineMdClose.tsx'
 
 // const config = {
 // 	useModal1: {
@@ -113,7 +114,7 @@ export function createModal<C extends Config, O extends ModalOptions = {}>(c: C,
 		acc[key] = {
 			title: c[key].title,
 			content: c[key].content,
-		} 
+		}
 		return acc
 	}, {})
 
@@ -167,14 +168,21 @@ export function createModal<C extends Config, O extends ModalOptions = {}>(c: C,
 		return <Ctx value={{ m, params }}>
 			<dialog id="modal" className="modal">
 				<div className="modal-box">
-					<h3 className="text-lg font-bold">{curr?.title}</h3>
+					<div className='flex items-center justify-between'>
+						<h3 className="text-lg font-bold">{curr?.title}</h3>
+						<button className="btn btn-circle btn-sm btn-ghost" 
+						onClick={() => setIsShow(false)}
+						>
+							<LineMdClose width={18} height={18} />
+						</button>
+					</div>
 					<div className='pt-4'>
-					{curr ? createElement(curr.content, { ...(params ? params[current as Extract<keyof C, string>] : {}) }) : null}
+						{curr ? createElement(curr.content, { ...(params ? params[current as Extract<keyof C, string>] : {}) }) : null}
 					</div>
 
-				<div className='modal-action'>
-					<button className="btn" onClick={() => setIsShow(false)}>Close</button>
-				</div>
+					{/* <div className='modal-action'>
+						<button className="btn" onClick={() => setIsShow(false)}>Close</button>
+					</div> */}
 				</div>
 			</dialog>
 			{children}
@@ -204,11 +212,11 @@ export function createModal<C extends Config, O extends ModalOptions = {}>(c: C,
 		Ctx,
 		modals,
 		params,
-		[options?.providerName ? `Provider${options.providerName.const}`: "Provider"]: Provider,
+		[options?.providerName ? `Provider${options.providerName.const}` : "Provider"]: Provider,
 		// ...(options?.providerName
 		// 	? { [`Provider${options.providerName}`]: Provider }
 		// 	: { Provider }),
-	} as any 
+	} as any
 }
 
 
