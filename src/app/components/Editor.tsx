@@ -1,10 +1,23 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 import { vim } from "@replit/codemirror-vim"
 import { oneDark } from '@codemirror/theme-one-dark';
 import { linter, Diagnostic } from '@codemirror/lint';
+import { create } from 'zustand';
+
+type TEditorStore = {
+	value: string;
+	setValue: (json: string) => void;
+}
+
+export const useEditor = create<TEditorStore>((set) => {
+	return {
+		value: "",
+		setValue: (value: string) => set(() => ({ value })),
+	};
+})
 
 type Props = {
 	height?: number
@@ -12,6 +25,7 @@ type Props = {
 	useVim?: boolean
 	width?: number
 	onEdit?: (value: string) => void
+	// onClear?: () => void
 }
 
 const jsonLinter = () => {
@@ -39,19 +53,36 @@ const jsonLinter = () => {
 	});
 };
 
-function Editor({ height, width, readonly = false, useVim = false }: Props) {
-	const [value, setValue] = useState();
+function Editor({
+	height,
+	onEdit,
+	// onClear,
+	readonly = false,
+	useVim = false,
+	width,
+}: Props) {
+	// const [value, setValue] = useState("");
+	const { value, setValue } = useEditor();
 	const [error, setError] = useState<string | null>(null);
 
-	const onChange = React.useCallback((val: any, viewUpdate: any) => {
+	const onChange = useCallback((val: string, viewUpdate: any) => {
 		setValue(val);
 		try {
 			JSON.parse(val);
 			setError(null); // valid JSON
+			onEdit && onEdit(val);
 		} catch (e: any) {
 			setError(e.message); // invalid JSON
 		}
 	}, []);
+
+	// const onClearHandler = useCallback(() => {
+	// 	setValue("");
+	// 	setError(null);
+	// 	onClear && onClear();
+	// }, []);
+
+
 	return <div className='flex flex-col gap-2'>
 		<CodeMirror
 			className=' cursor-pointer  border border-blue-400 rounded-md overflow-hidden'
@@ -69,4 +100,6 @@ function Editor({ height, width, readonly = false, useVim = false }: Props) {
 		)}
 	</div>;
 }
+
+
 export default Editor;

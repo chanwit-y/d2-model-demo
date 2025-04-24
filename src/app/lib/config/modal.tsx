@@ -2,7 +2,7 @@
 "use client"
 
 
-import { JSONEditor } from "@/app/components/JSONEditor";
+import { JSONEditor } from "@/app/components/json/JSONEditor";
 import { createModal } from "@/app/lib/modal/ModalFactory";
 import { Type } from "@sinclair/typebox";
 

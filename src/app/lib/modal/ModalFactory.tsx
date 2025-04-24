@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, ReactNode, Context, use, useState, useEffect, useMemo, ComponentType, createElement } from 'react'
+import { createContext, ReactNode, Context, use, useState, useEffect, useMemo, ComponentType, createElement, useCallback } from 'react'
 import { TLiteral, TObject, Type, type Static } from '@sinclair/typebox'
 import { LineMdClose } from '@/app/components/asset/icon/LineMdClose.tsx'
 
@@ -57,6 +57,7 @@ type Hook<P> = () => HookResult<P>
 type TContext<C extends Config> = {
 	m: { [K in keyof C]: Hook<Static<C[K]["param"]>> };
 	params?: { [K in keyof C]: Static<C[K]["param"]> };
+	close: () => void	
 };
 
 // function createModal<C extends Config>(c: C): {
@@ -70,26 +71,26 @@ type ModalOptions = {
 	providerName?: TLiteral | undefined
 }
 
-type ProviderProps<O extends ModalOptions> = O extends ModalOptions ?
-	O["providerName"] extends TLiteral
-	? Static<O["providerName"]> extends string
-	? {
-		[`P`]: ({ children }: { children: ReactNode }) => ReactNode
-	} : never
-	: never
-	: never;
+// type ProviderProps<O extends ModalOptions> = O extends ModalOptions ?
+// 	O["providerName"] extends TLiteral
+// 	? Static<O["providerName"]> extends string
+// 	? {
+// 		[`P`]: ({ children }: { children: ReactNode }) => ReactNode
+// 	} : never
+// 	: never
+// 	: never;
 
-type X<O extends ModalOptions> = O["providerName"] extends infer U ? U extends TLiteral ? Static<U> extends string ? U : ""
-	: "" : ""
+// type X<O extends ModalOptions> = O["providerName"] extends infer U ? U extends TLiteral ? Static<U> extends string ? U : ""
+// 	: "" : ""
 
 
-const x = <O extends ModalOptions>(o: O): { [K in O["providerName"] extends TLiteral ? `X${Extract<Static<O["providerName"]>, string>}` : never]: any } => {
-	return {} as any
-}
+// const x = <O extends ModalOptions>(o: O): { [K in O["providerName"] extends TLiteral ? `X${Extract<Static<O["providerName"]>, string>}` : never]: any } => {
+// 	return {} as any
+// }
 
-const y = x({ providerName: Type.Literal("XModal") })
+// const y = x({ providerName: Type.Literal("XModal") })
 
-y.XXModal
+// y.XXModal
 
 
 
@@ -163,9 +164,9 @@ export function createModal<C extends Config, O extends ModalOptions = {}>(c: C,
 			} else console.error(`Modal with id not found`)
 		}, [isShow])
 
-		// console.log("hook", hook)
+		const close = useCallback(() => setIsShow(false), [])
 
-		return <Ctx value={{ m, params }}>
+		return <Ctx value={{ m, params, close }}>
 			<dialog id="modal" className="modal">
 				<div className="modal-box">
 					<div className='flex items-center justify-between'>

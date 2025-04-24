@@ -2,7 +2,8 @@ import { create } from "zustand";
 import { Edge, Node } from "@xyflow/react";
 import { JsonEntity } from "./JsonEntity";
 import jModel, { TNodeJModel } from "./JModel";
-import data from "./data/input.json";
+// import data from "./data/input.json";
+import data from "../../../../../json/1745485489077.json"
 
 type TStord = {
   initialNodes: Node<TNodeJModel>[];
