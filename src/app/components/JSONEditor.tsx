@@ -1,23 +1,7 @@
-import { use } from "react"
-// import { Ctx } from "./ModalFactory"
-
+import Editor from "./Editor"
 
 export const JSONEditor = () => {
-	// const { m, param} = use(Ctx)
-
-
-	return <div>
+	return <div   >
+		<Editor  height={600} useVim={true} />
 	</div>
 }
-
-
-// export const Modal2 = ({ age, text }: { age: number, text: string }) => {
-// 	// const { m, param} = use(Ctx)
-
-
-// 	return <div>
-// 		<h1>Modal 2</h1>
-// 		<h3>{text}</h3>
-// 		<p>{String(age)}</p>
-// 	</div>
-// }

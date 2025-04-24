@@ -106,8 +106,14 @@ export function createModal<C extends Config, O extends ModalOptions = {}>(c: C,
 	: "Provider"]
 	: ({ children }: { children: ReactNode }) => ReactNode } {
 
-	const registers = Object.keys(c).reduce((acc: Record<string, ComponentType<any>>, key: string) => {
-		acc[key] = c[key].content
+	const registers = Object.keys(c).reduce((acc: Record<string, {
+		content: ComponentType<any>,
+		title: string
+	}>, key: string) => {
+		acc[key] = {
+			title: c[key].title,
+			content: c[key].content,
+		} 
 		return acc
 	}, {})
 
@@ -144,7 +150,7 @@ export function createModal<C extends Config, O extends ModalOptions = {}>(c: C,
 			return _acc
 		}, {} as { [K in keyof C]: Hook<Static<C[K]["param"]>> })
 
-		const content = useMemo(() => current ? registers[current] : null, [registers, current])
+		const curr = useMemo(() => current ? registers[current] : null, [registers, current])
 
 
 		useEffect(() => {
@@ -161,16 +167,14 @@ export function createModal<C extends Config, O extends ModalOptions = {}>(c: C,
 		return <Ctx value={{ m, params }}>
 			<dialog id="modal" className="modal">
 				<div className="modal-box">
-					<h3 className="text-lg font-bold">Hello!</h3>
-					{/* {content} */}
-					{/* <div className="modal-action">
-						<button className="btn" onClick={() => setIsShow(false)}>Close</button>
+					<h3 className="text-lg font-bold">{curr?.title}</h3>
+					<div className='pt-4'>
+					{curr ? createElement(curr.content, { ...(params ? params[current as Extract<keyof C, string>] : {}) }) : null}
+					</div>
 
-					</div> */}
-					{/* {content ?? <span>No Content</span>} */}
-					{content ? createElement(content, { ...(params ? params[current as Extract<keyof C, string>] : {}) }) : null}
-					{/* {content && typeof content === "function" ? content({ ...param }) : content ?? <span>No Content</span>} */}
+				<div className='modal-action'>
 					<button className="btn" onClick={() => setIsShow(false)}>Close</button>
+				</div>
 				</div>
 			</dialog>
 			{children}

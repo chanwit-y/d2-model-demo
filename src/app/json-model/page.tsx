@@ -6,10 +6,8 @@ import { ProviderJSONModal } from '../lib/config/modal';
 export default function App() {
 	return (
 		<ProviderJSONModal>
-			<>
 				<Toolbar />
 				<JsonModel />
-			</>
 		</ProviderJSONModal>
 
 	)
