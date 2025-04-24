@@ -2,6 +2,7 @@
 import { modals } from '@/app/lib/config/modal'
 import { IxImport } from '../asset/icon/IxImport'
 import { ListAltOutLineSharp } from '../asset/icon/ListAltOutLineSharp'
+import { FileList } from './FileList'
 
 export const Toolbar = () => {
 	const { show } = modals().jsonEditorModal()
@@ -36,14 +37,7 @@ export const Toolbar = () => {
 							<ListAltOutLineSharp />
 						</label>
 					</div>
-					<div className="drawer-side">
-						<label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
-						<ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-							{/* Sidebar content here */}
-							<li><a>Sidebar Item 1</a></li>
-							<li><a>Sidebar Item 2</a></li>
-						</ul>
-					</div>
+					<FileList />
 				</div>
 			</div>
 		</div>
