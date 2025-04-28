@@ -2,7 +2,7 @@
 import { modals } from '@/app/lib/config/modal'
 import { IxImport } from '../asset/icon/IxImport'
 import { ListAltOutLineSharp } from '../asset/icon/ListAltOutLineSharp'
-import { FileList } from './FileList'
+import FileList from './FileList'
 
 export const Toolbar = () => {
 	const { show } = modals().jsonEditorModal()
@@ -20,14 +20,22 @@ export const Toolbar = () => {
 		<div className='flex justify-between p-4'>
 			<div className='flex gap-2'>
 
-				<button className="btn btn-outline btn-sm btn-info btn-square"
-				onClick={() => show({})}
+				<button className="btn btn-outline btn-sm  btn-square"
+					onClick={() => show({})}
 				>
 					<IxImport />
 				</button>
 			</div>
 
-			<div className='flex gap-2'>
+
+			<div className='flex gap-2  '>
+
+				<div className='flex gap-2'>
+					<button className="btn btn-dash btn-info btn-sm">Request</button>
+					<button className="btn btn-ghost  btn-sm">Respont</button>
+				</div>
+
+
 
 				<div className="drawer drawer-end z-10">
 					<input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -40,6 +48,7 @@ export const Toolbar = () => {
 					<FileList />
 				</div>
 			</div>
-		</div>
+
+		 </div>
 	)
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import TheameButton from './TheameButton'
+// import logo from "./asset/logo.png"
 
 export default function Header() {
 	return (
@@ -20,6 +21,7 @@ export default function Header() {
 				</button>
 			</div>
 			<div className="flex-1">
+				{/* <img src="~/asset/logo.png"  className='w-10 h-10' /> */}
 				<a className="btn btn-ghost text-xl">d2 ~ Model</a>
 			</div>
 			<div className="flex-none">

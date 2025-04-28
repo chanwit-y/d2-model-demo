@@ -1,9 +1,9 @@
 'use client'
 import { useEffect, useMemo } from "react"
 import { Background, BackgroundVariant, Controls, MiniMap, Node, ReactFlow, useEdgesState, useNodesState } from "@xyflow/react";
-import {  useStore } from "./Stord";
 import '@xyflow/react/dist/style.css';
 import { TNodeJModel } from "./JModel";
+import { useStore } from "../Stord";
 
 
 type Props = {}
@@ -20,6 +20,7 @@ export default function JsonModel({ }: Props) {
 	}, [])
 
 	useEffect(() => {
+		console.log('initialNodes', initialNodes)
 		setNodes(initialNodes)
 		setEdges(initialEdges as any)
 	}, [initialNodes, initialEdges])

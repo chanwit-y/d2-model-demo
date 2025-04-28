@@ -23,7 +23,7 @@ type JObject = {
   isObject: boolean;
 };
 
-class JModel {
+export class JModel {
   private _nodes: Node<TNodeJModel>[] = [];
   private _edges: Edge[] = [];
 

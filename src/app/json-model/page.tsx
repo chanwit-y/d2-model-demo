@@ -5,10 +5,15 @@ import { ProviderJSONModal } from '../lib/config/modal';
 
 export default function App() {
 	return (
-		<ProviderJSONModal>
+
+
+			<ProviderJSONModal>
 				<Toolbar />
+
+
 				<JsonModel />
-		</ProviderJSONModal>
+
+			</ProviderJSONModal>
 
 	)
 }

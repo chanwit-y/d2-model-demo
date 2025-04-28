@@ -1,11 +1,27 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { listJson } from './action'
+import { FileItem } from './FileItem'
 
-export const FileList = () => {
+import { useAwait } from '@/app/hook/useAwait'
+import { useStore } from './Stord'
+
+export default function FileList() {
+
+	const { data: files } = useAwait<any[]>(listJson)
+	const  currentFile  = useStore((state) => state.currentFile);
+
+	// const files = useMemo(async () => {
+	// 	const res = await listJson()
+	// 	return res
+	// }, [])
+
+
+
 
 	useEffect(() => {
-		listJson()
-	}, [])
+		console.log("currentFile", currentFile)
+	}
+	, [currentFile])
 
 	return (
 		<div className="drawer-side">
@@ -17,44 +33,17 @@ export const FileList = () => {
 				<h2 className="py-2 text-lg font-bold">{`{JSON}`}</h2>
 				<hr className='my-2 border-gray-600' />
 
+
 				{/* Sidebar content here */}
+				{
+					(files ?? []).map((f, i) => (
+						<li key={i} className='my-1'>
+							<FileItem title={f} isActive={currentFile === f} />
+						</li>
+					))
+				}
 
-				<li className='my-1'>
-					<div className='flex justify-between items-center active'>
-						<span className="text-sm">Sidebar Item 1</span>
-						<button className="btn btn-sm btn-ghost btn-circle">_/</button>
-					</div>
-				</li>
 
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
-				<li className='my-1'><a className="">Sidebar Item 1</a></li>
 			</ul>
 		</div>
 	)
