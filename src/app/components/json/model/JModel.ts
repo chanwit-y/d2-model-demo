@@ -35,43 +35,40 @@ export class JModel {
     res: Node<TNodeJModel>[] = []
   ) {
     const id = uuidv4();
-    const obj: JObject[] = [];
+    const objects: JObject[] = [];
+    
     Object.entries(data).forEach(([key, value]) => {
       const isObject = typeof value === "object" && value !== null;
+      
       if (isObject) {
         value instanceof Array
-          ? value.forEach((item) =>
+          ? value.forEach(item => 
               this._json2nodes(item, key, id, [...paths, key], res)
             )
-          : this._json2nodes(value, key, id, [...paths, `${key}`], res);
+          : this._json2nodes(value, key, id, [...paths, key], res);
       }
 
-      obj.push({ id, key, value, isObject });
+      objects.push({ id, key, value, isObject });
     });
 
-    //Note: Can be transformed to a single object
-    //Todo: move this to a extension
-    const p =
-      res.length > 0 ? res[res.length - 1] : { position: { x: 0, y: 0 } };
+    const prevNode = res.length > 0 ? res[res.length - 1] : { position: { x: 0, y: 0 } };
 
     const flowObj = {
       id: `${bfo}-${id}`,
       type: "JsonEntity",
-      position: { x: p.position.x - 600, y: p.position.y - 200 },
+      position: { x: prevNode.position.x - 600, y: prevNode.position.y - 200 },
       data: {
         model: {
           name: bfo,
           targetHandle: `${bfo}-${id}-target`,
           sourceId,
           paths,
-          fields: obj.map((item) => {
-            return {
-              name: item.key,
-              type: item.isObject ? "object" : typeof item.value,
-              value: item.value,
-              sourceHandle: item.isObject ? `${item.key}-${id}-source` : "",
-            };
-          }),
+          fields: objects.map(item => ({
+            name: item.key,
+            type: item.isObject ? "object" : typeof item.value,
+            value: item.value,
+            sourceHandle: item.isObject ? `${item.key}-${id}-source` : "",
+          })),
         },
       },
     };
@@ -81,25 +78,29 @@ export class JModel {
 
   private _nodes2Edges(nodes: Node<TNodeJModel>[]) {
     const edges: Edge[] = [];
-    nodes.reverse().forEach((item) => {
-      const { paths } = item.data.model;
+    const reversedNodes = [...nodes].reverse();
+    
+    reversedNodes.forEach(node => {
+      const { paths, sourceId, targetHandle } = node.data.model;
 
       if (paths.length > 1) {
+        const lastPath = paths[paths.length - 1];
+        const parentPath = paths[paths.length - 2];
+        
         const edge = {
           id: uuidv4(),
-          source: `${paths[paths.length - 2]}-${item.data.model.sourceId}`,
-          target: `${item.id}`,
-          sourceHandle: `${paths[paths.length - 1]}-${
-            item.data.model.sourceId
-          }-source`,
-          targetHandle: `${item.data.model.targetHandle}`,
-          // type: "smoothstep",
+          source: `${parentPath}-${sourceId}`,
+          target: node.id,
+          sourceHandle: `${lastPath}-${sourceId}-source`,
+          targetHandle,
           animated: true,
           style: { strokeWidth: 2, stroke: "oklch(82.8% 0.111 230.318)" },
         };
+        
         edges.push(edge);
       }
     });
+    
     return edges;
   }
 
@@ -123,5 +124,3 @@ export class JModel {
 }
 
 export default new JModel();
-
-

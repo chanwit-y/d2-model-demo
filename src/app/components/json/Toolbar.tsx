@@ -3,17 +3,10 @@ import { modals } from '@/app/lib/config/modal'
 import { IxImport } from '../asset/icon/IxImport'
 import { ListAltOutLineSharp } from '../asset/icon/ListAltOutLineSharp'
 import FileList from './FileList'
+import { SwichResult } from './ButtonGroup'
 
 export const Toolbar = () => {
 	const { show } = modals().jsonEditorModal()
-	// const { show } = modals().modal2()
-
-	// const x = useMemo(() => getModal().param?.modal1, []) 
-	// const { show } = modal1()
-
-	// useEffect(() => {
-	// 	console.log("x", x)
-	// }, [x])
 
 
 	return (
@@ -30,11 +23,7 @@ export const Toolbar = () => {
 
 			<div className='flex gap-2  '>
 
-				<div className='flex gap-2'>
-					<button className="btn btn-dash btn-info btn-sm">Request</button>
-					<button className="btn btn-ghost  btn-sm">Respont</button>
-				</div>
-
+				<SwichResult />
 
 
 				<div className="drawer drawer-end z-10">

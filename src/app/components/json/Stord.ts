@@ -2,17 +2,19 @@ import { create } from "zustand";
 import { Edge, Node } from "@xyflow/react";
 import { JsonEntity } from "./model/JsonEntity";
 import { TNodeJModel, JModel } from "./model/JModel";
-// import data from "./data/input.json";
 import data from "../../../../json/1745485489077.json";
 import { readJson } from "./action";
+
+export type ButtonType = 'request' | 'response';
 
 type TStord = {
   initialNodes: Node<TNodeJModel>[];
   initialEdges: Edge[];
   initNodeTypes: Record<string, any>;
   currentFile: string;
+  activeButtonType: ButtonType;
   onSelectedJsonFile: (fileName: string) => void;
-
+  setActiveButtonType: (type: ButtonType) => void;
 };
 
 // export type TNodeJModel = {
@@ -113,19 +115,20 @@ type TStord = {
 // };
 
 export const useStore = create<TStord>((set) => {
-
-  // const jModel = new JModel();
   return {
-    initialNodes: [], //jModel.json2nodes(data).nodes,
-    initialEdges: [], //jModel.nodes2edges().edges,
+    initialNodes: [],
+    initialEdges: [],
     initNodeTypes: { JsonEntity },
+    currentFile: "",
+    activeButtonType: 'request',
     onSelectedJsonFile: async (currentFile: string) => {
       set({currentFile})
       const json = await readJson(currentFile);
-      console.log("json", json);
       const j = (new JModel()).json2nodes(json);
       set({ initialNodes: j.nodes, initialEdges: j.nodes2edges().edges });
     },
-    currentFile: "",
+    setActiveButtonType: (activeButtonType: ButtonType) => {
+      set({ activeButtonType });
+    }
   };
 });
