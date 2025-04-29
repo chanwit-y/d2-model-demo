@@ -1,48 +1,75 @@
 "use server";
 import { writeFile } from "node:fs";
-import { readdir, readFile } from "node:fs/promises";
-// import { join } from "node:path";
+import { readdir, readFile, unlink } from "node:fs/promises";
+import { resolve } from "node:path";
 
-export async function createJson(json: string) {
-  const filePath = `./json/${Date.now()}.json`;
-  await writeFile(filePath, json, (err) => {
-    if (err) {
-      console.error("Error writing file:", err);
-    } else {
-      console.log("File written successfully:", filePath);
-    }
-  });
-  return filePath;
-}
+const JSON_DIR = "./json";
 
-export async function readJson(fileName: string) {
-  try {
-    const data = await readFile(`./json/${fileName}`, "utf-8");
-    const jsonData = JSON.parse(data);
-    return jsonData;
-  } catch (err) {
-    console.error("An error occurred:", err);
-    throw err; // Re-throw the error to be handled by the caller
-  }
-}
-
-export async function listJson() {
-  //list all json files typescript
-
-  // const directoryPath = join(__dirname, "json");
-  // console.log("directoryPath", directoryPath);
-
-  const res: any[] = [];
-  try {
-    const files = await readdir("./json");
-    files.forEach((file: string) => {
-      if (file.endsWith(".json")) {
-        res.push(file);
+/**
+ * Creates a new JSON file with the provided content
+ * @param json JSON string to save
+ * @returns Path to the created file
+ */
+export async function createJson(json: string): Promise<string> {
+  const filename = `${Date.now()}.json`;
+  const filePath = `${JSON_DIR}/${filename}`;
+  
+  return new Promise((resolve, reject) => {
+    writeFile(filePath, json, (err) => {
+      if (err) {
+        console.error("Error writing file:", err);
+        reject(err);
+      } else {
+        console.log("File written successfully:", filePath);
+        resolve(filename);
       }
-      console.log(file);
     });
+  });
+}
+
+/**
+ * Reads and parses a JSON file by name
+ * @param fileName Name of the JSON file to read
+ * @returns Parsed JSON data
+ */
+export async function readJson(fileName: string): Promise<Record<string, any>> {
+  try {
+    const filePath = resolve(`${JSON_DIR}/${fileName}`);
+    const data = await readFile(filePath, "utf-8");
+    return JSON.parse(data);
   } catch (err) {
-    console.error("Unable to scan directory:", err);
+    console.error(`Error reading JSON file ${fileName}:`, err);
+    throw err;
   }
-  return res;
+}
+
+/**
+ * Lists all JSON files in the JSON directory
+ * @returns Array of JSON filenames
+ */
+export async function listJson(): Promise<string[]> {
+  try {
+    const files = await readdir(JSON_DIR);
+    const jsonFiles = files.filter(file => file.endsWith(".json"));
+    
+    return jsonFiles;
+  } catch (err) {
+    console.error("Unable to scan JSON directory:", err);
+    return [];
+  }
+}
+
+/**
+ * Deletes a JSON file by name
+ * @param fileName Name of the JSON file to delete
+ * @returns Success status
+ */
+export async function deleteJson(fileName: string): Promise<boolean> {
+  try {
+    await unlink(`${JSON_DIR}/${fileName}`);
+    return true;
+  } catch (err) {
+    console.error(`Error deleting JSON file ${fileName}:`, err);
+    return false;
+  }
 }
