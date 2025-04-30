@@ -7,8 +7,14 @@ import { useStore } from './Stord'
 
 export default function FileList() {
 
-	const { data: files } = useAwait<any[]>(listJson)
+	// const { data: files } = useAwait<any[]>(listJson)
+	const {files, reloadFileList} = useStore()
 	const  currentFile  = useStore((state) => state.currentFile);
+
+	useEffect(() => {
+		reloadFileList()
+	}, [])
+
 
 	// const files = useMemo(async () => {
 	// 	const res = await listJson()

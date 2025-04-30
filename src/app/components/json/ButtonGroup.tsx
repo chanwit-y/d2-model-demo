@@ -17,7 +17,7 @@ export const SwichResult = () => {
         Request
       </button>
       <button 
-        className={`btn btn-sm ${activeButtonType === 'response' ? 'btn-info' : 'btn-ghost'}`}
+        className={`btn btn-sm ${activeButtonType === 'response' ? 'btn-success' : 'btn-ghost'}`}
         onClick={() => handleClick('response')}
       >
         Response

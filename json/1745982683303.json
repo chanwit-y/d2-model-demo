@@ -1,0 +1,262 @@
+{
+    "data": {
+        "id": 29,
+        "documentType": "NON",
+        "libraryName": "13-NONPO",
+        "libraryPath": "13NONPO",
+        "qrCodeType": "NON",
+        "rotate": 0,
+        "regex": "^(NON)-(\\d+)$",
+        "docTypeRegex": "^(NPO)-.+$",
+        "qrCodeSplitBy": "-",
+        "qrCodeFields": [
+            {
+                "id": "68d1b591-e5f4-4d40-94d5-e27b1e7fb1b4",
+                "fieldName": "documentType",
+                "splitBy": "",
+                "childFields": []
+            },
+            {
+                "id": "21e1a904-79ce-4ea3-b97b-4e3bf371fa61",
+                "fieldName": "purchaseOrderNo",
+                "splitBy": "",
+                "childFields": []
+            }
+        ],
+        "checkin": true,
+        "documentListFields": [
+            {
+                "id": "65829be9-e90e-4a76-8c4b-321f37237eae",
+                "source": "ORACLE",
+                "fieldName": "KeyRefId",
+                "documentListFieldName": "No",
+                "functionName": "",
+                "defaultValue": ""
+            }
+        ],
+        "insertTransactionList": false,
+        "sharepointFields": [
+            {
+                "id": "4239729e-da7c-4dcd-97be-0532dff8fbec",
+                "source": "ORACLE",
+                "from": "Relate",
+                "to": "ReceiveNumber",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "6f6ba89d-0c27-464f-8107-42e18a5fbbfa",
+                "source": "QR_CODE",
+                "from": "PurchaseOrderNo",
+                "to": "PurchaseOrderNumber",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "c5394669-ce46-40c0-a2f9-af1df55998a2",
+                "source": "ORACLE",
+                "from": "TransactionDate",
+                "to": "PurchaseOrderDate",
+                "type": "Datetime",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "8c94567f-4d53-4984-9042-93101d0bf3c4",
+                "source": "ORACLE",
+                "from": "SupplierCustomerId",
+                "to": "SupplierNumber",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "de5f8229-2902-4db8-87c9-61c33cc19e36",
+                "source": "ORACLE",
+                "from": "SupplierCustomerName",
+                "to": "SupplierName",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "1b5efc24-aab4-4b74-a72f-216d0af7351b",
+                "source": "ORACLE",
+                "from": "JournalName",
+                "to": "ContractNumber",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "e8e4a2ce-6fd0-4f81-bf0f-cfb4207b1d3c",
+                "source": "ORACLE",
+                "from": "CompanyCode",
+                "to": "CompanyName",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": "GetCompanyCode"
+            },
+            {
+                "id": "e29e68d1-99b5-484a-beb6-9b054a51a7f8",
+                "source": "ORACLE",
+                "from": "Requester",
+                "to": "Requester",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "36e08df4-3faa-4d83-b4fa-67abb9ddb59b",
+                "source": "ORACLE",
+                "from": "PoAmount",
+                "to": "Amount",
+                "type": "Number",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "17fabb38-8303-4317-b943-8416770c9645",
+                "source": "ORACLE",
+                "from": "CurrencyCode",
+                "to": "Currency",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "da7b979a-fb13-4dbb-a72d-989be4dfd0ad",
+                "source": "ORACLE",
+                "from": "InvoiceNumber",
+                "to": "InvoiceNumber",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "7b95bbb3-4eae-4771-9427-879d9821f7d2",
+                "source": "ORACLE",
+                "from": "KeyRefId",
+                "to": "KeyRefId",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "241fb9f5-4c50-4432-846c-d9d4c8dd4234",
+                "source": "ORACLE",
+                "from": "RelateId",
+                "to": "RelateId",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "d066547c-e195-4b3f-9b05-d8d81d9939d5",
+                "source": "ORACLE",
+                "from": "VoidDate",
+                "to": "VoidDate",
+                "type": "Datetime",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "b83b9a62-812f-4a0d-831c-e7d606545c4d",
+                "source": "ORACLE",
+                "from": "UpdateDate",
+                "to": "OracleUpdateDate",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            },
+            {
+                "id": "5cc0347b-0ac6-48c1-bf66-3b03231e2b5b",
+                "source": "ORACLE",
+                "from": "ModuleCode",
+                "to": "ModuleCode",
+                "type": "Singleline",
+                "defaultValue": "",
+                "urlTextName": "",
+                "functionName": ""
+            }
+        ],
+        "fileNameFormat": [
+            {
+                "source": "QR_CODE",
+                "fieldName": "documentType",
+                "functionName": "",
+                "connector": "-"
+            },
+            {
+                "source": "QR_CODE",
+                "fieldName": "purchaseOrderNo",
+                "functionName": "",
+                "connector": ""
+            }
+        ],
+        "folderPathField": [
+            {
+                "source": "ORACLE",
+                "fieldName": "TransactionDate",
+                "functionName": "GetYearStr",
+                "connector": "/"
+            },
+            {
+                "source": "ORACLE",
+                "fieldName": "CompanyCode",
+                "functionName": "GetCompanyCode",
+                "connector": "/"
+            },
+            {
+                "source": "QR_CODE",
+                "fieldName": "purchaseOrderNo",
+                "functionName": "",
+                "connector": ""
+            }
+        ],
+        "qrFieldNameValidators": [
+            {
+                "id": "68d1b591-e5f4-4d40-94d5-e27b1e7fb1b4",
+                "fieldName": "documentType"
+            },
+            {
+                "id": "21e1a904-79ce-4ea3-b97b-4e3bf371fa61",
+                "fieldName": "purchaseOrderNo"
+            }
+        ],
+        "oracleCriteria": [
+            {
+                "oracleField": "journalName",
+                "qrCodeField": "purchaseOrderNo",
+                "functionName": "",
+                "defaultValue": ""
+            },
+            {
+                "oracleField": "moduleCode",
+                "qrCodeField": "",
+                "functionName": "",
+                "defaultValue": "PO_HEAD"
+            }
+        ]
+    },
+    "message": "Success",
+    "errors": null,
+    "success": true
+}

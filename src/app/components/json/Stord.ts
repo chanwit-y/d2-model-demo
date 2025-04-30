@@ -3,9 +3,11 @@ import { Edge, Node } from "@xyflow/react";
 import { JsonEntity } from "./model/JsonEntity";
 import { TNodeJModel, JModel } from "./model/JModel";
 import data from "../../../../json/1745485489077.json";
-import { readJson } from "./action";
+import { listJson, readJson } from "./action";
+import { api } from "@/app/lib/config/api";
+import { TFinGwReq } from "@/app/lib/config/@types/finGwReq";
 
-export type ButtonType = 'request' | 'response';
+export type ButtonType = "request" | "response";
 
 type TStord = {
   initialNodes: Node<TNodeJModel>[];
@@ -13,122 +15,53 @@ type TStord = {
   initNodeTypes: Record<string, any>;
   currentFile: string;
   activeButtonType: ButtonType;
+  files: string[];
+  request: TFinGwReq;
+  response: Record<string, any>;
   onSelectedJsonFile: (fileName: string) => void;
   setActiveButtonType: (type: ButtonType) => void;
+  reloadFileList: () => void;
+  call: () => Promise<void>;
 };
 
-// export type TNodeJModel = {
-//   model: {
-//     name: string;
-//     targetHandle: string;
-//     sourceId: string;
-//     paths: string[];
-//     fields: {
-//       name: string;
-//       type: string;
-//       value: any;
-//       sourceHandle?: string;
-//     }[];
-//   };
-// };
-
-// type JObject = {
-//   id: string;
-//   key: string;
-//   value: any;
-//   isObject: boolean;
-// };
-
-// export const Json2Nodes = (
-//   data: Record<string, any>,
-//   bfo: string = "",
-//   sourceId: string = "",
-//   paths: string[] = [],
-//   res: Node<TNodeJModel>[] = []
-// ) => {
-//   const id = uuidv4();
-//   const obj: JObject[] = [];
-//   Object.entries(data).forEach(([key, value]) => {
-//     const isObject = typeof value === "object" && value !== null;
-//     if (isObject) {
-//       value instanceof Array
-//         ? value.forEach((item) =>
-//             Json2Nodes(item, key, id, [...paths, key], res)
-//           )
-//         : Json2Nodes(value, key, id, [...paths, `${key}`], res);
-//     }
-
-//     obj.push({ id, key, value, isObject });
-//   });
-
-//   //Note: Can be transformed to a single object
-//   //Todo: move this to a extension
-//   const p = res.length > 0 ? res[res.length - 1] : { position: { x: 0, y: 0 } };
-
-//   const flowObj = {
-//     id: `${bfo}-${id}`,
-//     type: "JsonEntity",
-//     position: {x: p.position.x - 280, y: p.position.y - 100},
-//     data: {
-//       model: {
-//         name: bfo,
-//         targetHandle: `${bfo}-${id}-target`,
-//         sourceId,
-//         paths,
-//         fields: obj.map((item) => {
-//           return {
-//             name: item.key,
-//             type: item.isObject ? "object" : typeof item.value,
-//             value: item.value,
-//             sourceHandle: item.isObject ? `${item.key}-${id}-source` : "",
-//           };
-//         }),
-//       },
-//     },
-//   };
-
-//   res.push(flowObj);
-// };
-
-// export const Nodes2Edges = (nodes: Node<TNodeJModel>[]) => {
-//   const edges: Edge[] = [];
-//   nodes.reverse().forEach((item) => {
-//     const { paths } = item.data.model;
-
-//     if (paths.length > 1) {
-//       const edge = {
-//         id: uuidv4(),
-//         source: `${paths[paths.length - 2]}-${item.data.model.sourceId}`,
-//         target: `${item.id}`,
-//         sourceHandle: `${paths[paths.length - 1]}-${
-//           item.data.model.sourceId
-//         }-source`,
-//         targetHandle: `${item.data.model.targetHandle}`,
-//         // type: "smoothstep",
-//         animated: true,
-//         style: { strokeWidth: 2, stroke: "red" },
-//       };
-//       edges.push(edge);
-//     }
-//   });
-//   return edges;
-// };
-
-export const useStore = create<TStord>((set) => {
+export const useStore = create<TStord>((set, get) => {
   return {
     initialNodes: [],
     initialEdges: [],
     initNodeTypes: { JsonEntity },
     currentFile: "",
-    activeButtonType: 'request',
+    activeButtonType: "request",
+    files: [],
+    request: {} as TFinGwReq,
+    response: {},
     onSelectedJsonFile: async (currentFile: string) => {
-      set({currentFile})
+      set({ currentFile });
       const json = await readJson(currentFile);
-      const j = (new JModel()).json2nodes(json);
+      set({ request: json as TFinGwReq  });
+      const j = new JModel().json2nodes(json);
       set({ initialNodes: j.nodes, initialEdges: j.nodes2edges().edges });
     },
     setActiveButtonType: (activeButtonType: ButtonType) => {
       set({ activeButtonType });
+
+      if (activeButtonType === "response") {
+        console.log("response", get().response);
+        const j = new JModel().json2nodes(get().response);
+        set({ initialNodes: j.nodes, initialEdges: j.nodes2edges().edges });
+      } else {
+        const j = new JModel().json2nodes(get().request);
+        set({ initialNodes: j.nodes, initialEdges: j.nodes2edges().edges });
+      }
+    },
+    reloadFileList: async () => {
+      const files = await listJson();
+      set({ files });
+    },
+    call: async () => {
+      const response = await api.finGw(get().request)
+
+      set({ response });      
+
     }
   };
 });

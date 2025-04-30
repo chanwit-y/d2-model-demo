@@ -1,0 +1,85 @@
+{
+    "success": false,
+    "error": [
+        {
+            "code": "custom",
+            "message": "Withholding_Tax_Code_PAY must in list Master.ERP.awt_tax_rate",
+            "path": [
+                "batch",
+                "header",
+                0,
+                "line",
+                0,
+                "Withholding_Tax_Code_PAY"
+            ]
+        }
+    ],
+    "data": {
+        "batch": {
+            "ExternalJobID": "2020240222105304462",
+            "ExternalSystem": "ACCP",
+            "ExternalTotalAmount": 1070,
+            "ExternalCountTransaction": 1,
+            "RejectAllRecords": false,
+            "header": [
+                {
+                    "INVOICE_ID": "20240222105304415",
+                    "InvoiceType": "Invoice",
+                    "InvoiceSubType": "3way",
+                    "Company": "98",
+                    "BU": "01",
+                    "SupplierNumber": "2",
+                    "SupplierSite": "BRE-BKK",
+                    "InvoiceNumber": "",
+                    "InvDate": "2024-07-14T17:00:00.000Z",
+                    "InvoiceCurrency": "THB",
+                    "InvAmtInclTax": 1070,
+                    "TaxAmount": 70,
+                    "InvoiceDescription": "test",
+                    "ExchRate": null,
+                    "ExchRateType": "USA",
+                    "ExchRateDate": "2024-01-19T17:00:00.000Z",
+                    "RefInvoice": null,
+                    "PaymentTerm": "IMMEDIATELY",
+                    "PaymentMethod": "Check",
+                    "PayGroup": "BANK DUE-BKK",
+                    "mockCurrentDate": "2025-01-31T17:00:00.000Z",
+                    "SupplierLiabilityAccount": null,
+                    "AccountDate": "2025-04-03T17:00:00.000Z",
+                    "CreatedBy": "",
+                    "line": [
+                        {
+                            "INVOICE_LINE_ID": "202402221053044170",
+                            "INVOICE_ID": "20240222105304415",
+                            "LineNo": 0,
+                            "LineType": "",
+                            "LineDescription": "",
+                            "LineAmountInclTax": 1070,
+                            "LineAmountExclTax": 1000,
+                            "LineTaxAmount": 70,
+                            "TaxRate": 0,
+                            "TaxCode": "01.01.I.G",
+                            "Withholding_Tax_Code_PAY": "01-00-01-20-AX",
+                            "PONumber": "1234",
+                            "POLineNumber": 0,
+                            "GRNumber": "1234",
+                            "GRLineNumber": 0,
+                            "LineAccount": "01.01.00000.0000.14801.10003303.00000.000000.00000000",
+                            "LineDiscountAmount": 0,
+                            "CalDiscAllocation": 0,
+                            "QTYInvoice": 0,
+                            "VAT_REGISTRATION_NUM": "0105563036901",
+                            "CalTaxType": "01.01.I.G"
+                        }
+                    ],
+                    "Comp_Country": "TH",
+                    "CalculatedDueDate": "2025-02-09T17:00:00.000Z",
+                    "SumLineAmt": 1070,
+                    "SumLineDisc": 0
+                }
+            ],
+            "CHK_TOTAL": 1070,
+            "CHK_Count": 1
+        }
+    }
+}

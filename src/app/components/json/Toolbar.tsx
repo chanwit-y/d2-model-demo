@@ -4,10 +4,27 @@ import { IxImport } from '../asset/icon/IxImport'
 import { ListAltOutLineSharp } from '../asset/icon/ListAltOutLineSharp'
 import FileList from './FileList'
 import { SwichResult } from './ButtonGroup'
+import { Play } from '../asset/icon/Play'
+import { useStore } from './Stord'
+import { useCallback, useMemo } from 'react'
+import { useAwaitLoader, useLoader } from '../Loader'
 
 export const Toolbar = () => {
+	// const { open, close } = useLoader();
+	const {awaitLoader} = useAwaitLoader()
 	const { show } = modals().jsonEditorModal()
+	const { activeButtonType, call, setActiveButtonType } = useStore()
 
+
+	const canPlay = useMemo(() => activeButtonType === "request", [activeButtonType])
+
+	const playHandler = awaitLoader(call)
+	// const playHandler = useCallback(async () => {
+	// 	open();
+	// 	await call()
+	// 	setActiveButtonType("response")
+	// 	close();
+	// }, [])
 
 	return (
 		<div className='flex justify-between p-4'>
@@ -17,6 +34,14 @@ export const Toolbar = () => {
 					onClick={() => show({})}
 				>
 					<IxImport />
+				</button>
+
+				<button
+					className="btn btn-outline btn-sm  btn-square"
+					disabled={!canPlay}
+					onClick={playHandler}
+				>
+					<Play />
 				</button>
 			</div>
 
@@ -38,6 +63,6 @@ export const Toolbar = () => {
 				</div>
 			</div>
 
-		 </div>
+		</div>
 	)
 }
