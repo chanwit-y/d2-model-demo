@@ -7,24 +7,19 @@ import { SwichResult } from './ButtonGroup'
 import { Play } from '../asset/icon/Play'
 import { useStore } from './Stord'
 import { useCallback, useMemo } from 'react'
-import { useAwaitLoader, useLoader } from '../Loader'
+import { useAwaitLoader } from '../Loader'
 
 export const Toolbar = () => {
 	// const { open, close } = useLoader();
-	const {awaitLoader} = useAwaitLoader()
+	const { awaitLoader } = useAwaitLoader()
 	const { show } = modals().jsonEditorModal()
 	const { activeButtonType, call, setActiveButtonType } = useStore()
 
 
 	const canPlay = useMemo(() => activeButtonType === "request", [activeButtonType])
 
-	const playHandler = awaitLoader(call)
-	// const playHandler = useCallback(async () => {
-	// 	open();
-	// 	await call()
-	// 	setActiveButtonType("response")
-	// 	close();
-	// }, [])
+	const playHandler = useCallback(() => awaitLoader([call, () => setActiveButtonType("response")]),
+		[call, setActiveButtonType])
 
 	return (
 		<div className='flex justify-between p-4'>

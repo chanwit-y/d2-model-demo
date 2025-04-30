@@ -6,7 +6,7 @@ import { FinGwReq } from './@types/finGwReq';
 import { FinGwRes } from './@types/finGwRes';
 
 const http = new HttpClientFactory(
-  `https://b7bd-171-97-221-186.ngrok-free.app`,
+  ``,
   async () => "",
   "1.0.0",
   120000,

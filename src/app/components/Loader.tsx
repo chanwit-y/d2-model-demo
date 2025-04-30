@@ -15,13 +15,24 @@ export const useLoader = create<TLoader>((set) => ({
 	close: () => set({ loading: false }),
 }))
 
-export const useAwaitLoader = () => {
-	const {  open, close } = useLoader()
+type LoaderFn =  () => Promise<void> | void  
 
-	const awaitLoader = useCallback((fn: () => Promise<void>) => async () => {
-		open()
-		await fn()
-		close()
+export const useAwaitLoader = () => {
+	const { open, close } = useLoader();
+
+	const awaitLoader = useCallback(async (fns: LoaderFn[]) => {
+		console.log("Hi")
+		open();
+		try {
+			for (const fn of fns) {
+				await fn()
+			}
+			// await Promise.all(fns.map(f => f()))
+		} catch (e) {
+			console.error(e)
+		} finally {
+			close()
+		}
 	}, [])
 
 	return { awaitLoader }
@@ -34,7 +45,7 @@ export const Loader = () => {
 
 	return (
 		<div className='modal modal-open  '>
-				<span className="  loading loading-bars loading-xl text-info "></span>
+			<span className="  loading loading-bars loading-xl text-info "></span>
 		</div>
 	)
 }

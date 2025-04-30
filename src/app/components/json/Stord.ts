@@ -5,6 +5,7 @@ import { TNodeJModel, JModel } from "./model/JModel";
 import { listJson, readJson } from "./action";
 import { api } from "@/app/lib/config/api";
 import { TFinGwReq } from "@/app/lib/config/@types/finGwReq";
+import { file } from "bun";
 
 export type ButtonType = "request" | "response";
 
@@ -17,26 +18,41 @@ type TStord = {
   files: string[];
   request: TFinGwReq;
   response: Record<string, any>;
+};
+
+type TActions = {
   onSelectedJsonFile: (fileName: string) => void;
   setActiveButtonType: (type: ButtonType) => void;
-  reloadFileList: () => void;
+  reset: () => void;
   call: () => Promise<void>;
 };
 
-export const useStore = create<TStord>((set, get) => {
-  return {
-    initialNodes: [],
-    initialEdges: [],
+const init: TStord = {
+  initialNodes: [],
+  initialEdges: [],
+  currentFile: "",
+  activeButtonType: "request",
+  request: {} as TFinGwReq,
+  response: {},
+  files: [],
     initNodeTypes: { JsonEntity },
-    currentFile: "",
-    activeButtonType: "request",
-    files: [],
-    request: {} as TFinGwReq,
-    response: {},
+};
+
+export const useStore = create<TStord & TActions>((set, get) => {
+  return {
+    ...init,
+    // initialNodes: [],
+    // initialEdges: [],
+    // initNodeTypes: { JsonEntity },
+    // currentFile: "",
+    // activeButtonType: "request",
+    // files: [],
+    // request: {} as TFinGwReq,
+    // response: {},
     onSelectedJsonFile: async (currentFile: string) => {
       set({ currentFile });
       const json = await readJson(currentFile);
-      set({ request: json as TFinGwReq  });
+      set({ request: json as TFinGwReq });
       const j = new JModel().json2nodes(json);
       set({ initialNodes: j.nodes, initialEdges: j.nodes2edges().edges });
     },
@@ -52,15 +68,13 @@ export const useStore = create<TStord>((set, get) => {
         set({ initialNodes: j.nodes, initialEdges: j.nodes2edges().edges });
       }
     },
-    reloadFileList: async () => {
+    reset: async () => {
       const files = await listJson();
-      set({ files });
+      set({ ...init, files });
     },
     call: async () => {
-      const response = await api.finGw(get().request)
-
-      set({ response });      
-
-    }
+      const response = await api.finGw(get().request);
+      set({ response });
+    },
   };
 });
