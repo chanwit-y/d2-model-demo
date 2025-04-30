@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { Edge, Node } from "@xyflow/react";
 import { JsonEntity } from "./model/JsonEntity";
 import { TNodeJModel, JModel } from "./model/JModel";
-import data from "../../../../json/1745485489077.json";
 import { listJson, readJson } from "./action";
 import { api } from "@/app/lib/config/api";
 import { TFinGwReq } from "@/app/lib/config/@types/finGwReq";
